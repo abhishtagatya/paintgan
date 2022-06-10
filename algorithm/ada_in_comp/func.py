@@ -1,7 +1,5 @@
 import tensorflow as tf
-from keras import Model, Sequential
-from keras.layers import Input, InputLayer, Conv2D, UpSampling2D
-from keras.applications import VGG19
+from tensorflow import keras
 
 
 def get_encoder(image_size):
@@ -10,18 +8,18 @@ def get_encoder(image_size):
 
     :return: tf.keras.Model
     """
-    vgg19 = VGG19(
+    vgg19 = keras.applications.VGG19(
         include_top=False,
         weights="imagenet",
         input_shape=(*image_size, 3)
     )
     vgg19.trainable = False
-    mini_vgg19 = Model(vgg19.input, vgg19.get_layer("block4_conv1").output)
+    mini_vgg19 = keras.Model(vgg19.input, vgg19.get_layer("block4_conv1").output)
 
-    inputs = Input([*image_size, 3])
+    inputs = keras.layers.Input([*image_size, 3])
     mini_vgg19_out = mini_vgg19(inputs)
 
-    return Model(
+    return keras.Model(
         inputs,
         mini_vgg19_out,
         name="mini_vgg19"
@@ -70,35 +68,35 @@ def get_decoder(config=None):
             "activation": "relu"
         }
 
-    decoder = Sequential(
+    decoder = keras.Sequential(
         [
-            InputLayer((None, None, 512)),
-            Conv2D(filters=512, **config),
-            UpSampling2D(),
-            Conv2D(filters=256, **config),
-            Conv2D(filters=256, **config),
-            Conv2D(filters=256, **config),
-            Conv2D(filters=256, **config),
-            UpSampling2D(),
-            Conv2D(filters=128, **config),
-            Conv2D(filters=128, **config),
-            UpSampling2D(),
-            Conv2D(filters=64, **config),
-            Conv2D(
-                filters=3,
-                kernel_size=3,
-                strides=1,
-                padding="same",
-                activation="sigmoid",
-            ),
-        ]
-    )
+           keras.layers.InputLayer((None, None, 512)),
+           keras.layers.Conv2D(filters=512, **config),
+           keras.layers.UpSampling2D(),
+           keras.layers.Conv2D(filters=256, **config),
+           keras.layers.Conv2D(filters=256, **config),
+           keras.layers.Conv2D(filters=256, **config),
+           keras.layers.Conv2D(filters=256, **config),
+           keras.layers.UpSampling2D(),
+           keras.layers.Conv2D(filters=128, **config),
+           keras.layers.Conv2D(filters=128, **config),
+           keras.layers.UpSampling2D(),
+           keras.layers.Conv2D(filters=64, **config),
+           keras.layers.Conv2D(
+               filters=3,
+               kernel_size=3,
+               strides=1,
+               padding="same",
+               activation="sigmoid",
+               ),
+          ]
+      )
 
     return decoder
 
 
 def get_loss_net(image_size, layer_blocks=None):
-    vgg19 = VGG19(
+    vgg19 = keras.applications.VGG19(
         include_top=False,
         weights="imagenet",
         input_shape=(*image_size, 3)
@@ -114,12 +112,12 @@ def get_loss_net(image_size, layer_blocks=None):
     outputs = [
         vgg19.get_layer(name).output for name in layer_names
     ]
-    mini_vgg19 = Model(vgg19.input, outputs)
+    mini_vgg19 = keras.Model(vgg19.input, outputs)
 
-    inputs = Input([*image_size, 3])
+    inputs = keras.layers.Input([*image_size, 3])
     mini_vgg19_out = mini_vgg19(inputs)
 
-    return Model(
+    return keras.Model(
         inputs,
         mini_vgg19_out,
         name="loss_net"

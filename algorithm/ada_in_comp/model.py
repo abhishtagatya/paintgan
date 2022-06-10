@@ -1,5 +1,5 @@
 import tensorflow as tf
-from keras.metrics import Mean
+from tensorflow import keras
 
 from algorithm.ada_in_comp.func import ada_in_func, get_mean_std
 
@@ -16,9 +16,9 @@ class AdaptiveInstanceNorm(tf.keras.Model):
         self.optimizer = None
         self.loss_fn = None
 
-        self.style_loss_tracker = Mean(name="style_loss")
-        self.content_loss_tracker = Mean(name="content_loss")
-        self.total_loss_tracker = Mean(name="total_loss")
+        self.style_loss_tracker = keras.metrics.Mean(name="style_loss")
+        self.content_loss_tracker = keras.metrics.Mean(name="content_loss")
+        self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
 
     def compile(self, optimizer, loss_fn):
         super().compile()
