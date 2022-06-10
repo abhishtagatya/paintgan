@@ -89,7 +89,7 @@ class ArbitraryDataLoader(BaseDataLoader):
         )
 
         self.content_list = glob.glob(self.content_path + '/**/*.jpg', recursive=recursive)
-        self.style_list = glob.glob(self.content_path + '/**/*.jpg', recursive=recursive)
+        self.style_list = glob.glob(self.style_path + '/**/*.jpg', recursive=recursive)
 
         self.content_list = self.remove_corrupt(self.content_list)
         self.style_list = self.remove_corrupt(self.style_list)
