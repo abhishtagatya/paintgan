@@ -4,6 +4,9 @@ import os
 class Algorithm:
 
     def __init__(self, content_dir, style_dir, epochs=1, batch_size=1, image_size=(256, 256)):
+
+        self.model_name = self._set_class_name()
+
         # Dataset Parameters
         self.content_dir = content_dir
         self.style_dir = style_dir
@@ -23,6 +26,10 @@ class Algorithm:
 
     def build_model(self):
         pass
+
+    @classmethod
+    def _set_class_name(cls):
+        return cls.__name__
 
     @classmethod
     def _create_result_folder(cls):
