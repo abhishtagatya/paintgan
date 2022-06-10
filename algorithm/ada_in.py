@@ -37,7 +37,6 @@ class AdaIN(Algorithm):
                  checkpoint=None,
                  ):
         super(AdaIN, self).__init__(content_dir, style_dir, epochs, batch_size, image_size)
-
         self._create_result_folder()
         self.steps_per_epochs = steps_per_epochs
 
@@ -50,19 +49,16 @@ class AdaIN(Algorithm):
 
         self.style_weight = style_weight
 
-        if self.content_dir == "" or self.style_dir == "":
-            print(f'Loading Dataset from {self.content_dir} and {self.style_dir}')
+        if self.content_dir != "" and self.style_dir != "":
             self.data_loader = ArbitraryDataLoader(content_path=self.content_dir, style_path=self.style_dir)
             self.train_ds, self.test_ds = self.data_loader.as_dataset(
                 preprocess_func=decode_and_resize,
                 batch_size=self.batch_size
             )
 
-        print(f'Creating Model {self.model_name}')
         self.model = self.build_model()
 
         if checkpoint:
-            print(f'Loading Checkpoint {checkpoint}')
             self.model.load_weights(checkpoint)
 
         self.monitors = [
