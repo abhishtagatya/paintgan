@@ -27,7 +27,7 @@ class AdaIN(Algorithm):
                  content_dir,
                  style_dir,
                  epochs=1,
-                 batch_size=1,
+                 batch_size=32,
                  image_size=(256, 256),
                  style_weight=4.0,
                  checkpoint=None):
@@ -54,7 +54,7 @@ class AdaIN(Algorithm):
             self.model.load_weights(checkpoint)
 
         self.monitors = [
-            # DisplayMonitor('model_results', self.test_ds),
+            DisplayMonitor('model_results', self.test_ds),
             CheckpointMonitor('model_checkpoints', checkpoint_per=10),
             CSVLogger(f'{__name__}_p365-{self.epochs}-{self.batch_size}.csv', append=True, separator=';')
         ]

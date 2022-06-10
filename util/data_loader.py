@@ -114,8 +114,6 @@ class ArbitraryDataLoader(BaseDataLoader):
         style_train = self.style_list[:int(self.total_style * (1.0 - val_split))]
         style_val = self.style_list[int(self.total_style * (1.0 - val_split)):]
 
-        print(self.content_list)
-
         train_content_ds = (
             tf.data.Dataset.from_tensor_slices(content_train)
             .map(preprocess_func, num_parallel_calls=auto_tune)
