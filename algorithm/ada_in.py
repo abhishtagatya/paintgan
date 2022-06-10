@@ -60,6 +60,7 @@ class AdaIN(Algorithm):
         self.model = self.build_model()
 
         if checkpoint:
+            print(f'Loading Checkpoint {checkpoint}')
             self.model.load_weights(checkpoint)
 
         self.monitors = [
