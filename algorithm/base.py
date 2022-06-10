@@ -13,12 +13,7 @@ class Algorithm:
         self.batch_size = batch_size
         self.image_size = image_size
 
-        sub_folder_names = [
-            'model_results',
-            'model_checkpoints'
-        ]
-        for names in sub_folder_names:
-            os.makedirs(os.path.join(__name__, names), exist_ok=True)
+        self._create_result_folder()
 
     def evaluate(self):
         pass
@@ -28,3 +23,12 @@ class Algorithm:
 
     def build_model(self):
         pass
+
+    @classmethod
+    def _create_result_folder(cls):
+        sub_folder_names = [
+            'model_results',
+            'model_checkpoints'
+        ]
+        for names in sub_folder_names:
+            os.makedirs(os.path.join(cls.__name__, names), exist_ok=True)

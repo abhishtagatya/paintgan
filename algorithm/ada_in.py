@@ -61,7 +61,7 @@ class AdaIN(Algorithm):
         self.monitors = [
             DisplayMonitor(__name__, self.test_ds),
             CheckpointMonitor(__name__, checkpoint_per=10),
-            CSVLogger(f'{__name__}_p365-{self.epochs}-{self.batch_size}.csv', append=True, separator=';')
+            CSVLogger(f'{__name__}-{self.epochs}-{self.batch_size}.csv', append=True, separator=';')
         ]
 
     def build_model(self) -> tf.keras.Model:
