@@ -10,8 +10,6 @@
     Reference : https://keras.io/examples/generative/adain/#downloading-the-dataset-from-kaggle
 """
 import tensorflow as tf
-from keras.optimizers.optimizer_v2.adam import Adam
-from keras.losses import MeanSquaredError
 from keras.callbacks import CSVLogger
 
 from algorithm.base import Algorithm
@@ -35,8 +33,8 @@ class AdaIN(Algorithm):
                  checkpoint=None):
         super(AdaIN, self).__init__(content_dir, style_dir, epochs, batch_size, image_size)
 
-        self.optimizer = Adam(learning_rate=1e-5)
-        self.loss_fn = MeanSquaredError()
+        self.optimizer = tf.keras.optimizers.Adam(learning_rate=1e-5)
+        self.loss_fn = tf.keras.losses.MeanSquaredError()
 
         self.encoder = get_encoder(self.image_size)
         self.loss_net = get_loss_net(self.image_size)
