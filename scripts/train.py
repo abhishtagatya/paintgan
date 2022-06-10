@@ -10,6 +10,7 @@ if __name__ == '__main__':
     parser.add_argument('--content', type=str, required=True)
     parser.add_argument('--style', type=str, required=True)
     parser.add_argument('--epochs', type=int, required=False)
+    parser.add_argument('--steps-per-epoch', type=int, required=False)
     parser.add_argument('--batch-size', type=int, required=False)
 
     args = parser.parse_args()
@@ -19,6 +20,7 @@ if __name__ == '__main__':
             content_dir=args.content,
             style_dir=args.style,
             epochs=args.epochs,
+            steps_per_epochs=args.steps_per_epoch,
             batch_size=args.batch_size,
         )
         model.train()
