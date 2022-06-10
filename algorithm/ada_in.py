@@ -64,10 +64,12 @@ class AdaIN(Algorithm):
                 self.test_ds
             ),
             ModelCheckpoint(
-                filepath=f'{self.model_name}/model_checkpoints',
-                save_weights_only='val_total_loss',
+                filepath=f'{self.model_name}/model_checkpoints/{self.model_name}_{self.epochs}.cpkt',
+                save_weights_only=True,
+                monitor='val_total_loss',
                 mode='min',
-                save_best_only=True
+                save_best_only=True,
+                save_freq='epoch'
             ),
             CSVLogger(
                 f'{self.model_name}-{self.epochs}-{self.batch_size}.csv',
