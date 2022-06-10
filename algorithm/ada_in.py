@@ -35,8 +35,9 @@ class AdaIN(Algorithm):
                  image_size=(256, 256),
                  style_weight=4.0,
                  checkpoint=None,
+                 mode='train'
                  ):
-        super(AdaIN, self).__init__(content_dir, style_dir, epochs, batch_size, image_size)
+        super(AdaIN, self).__init__(content_dir, style_dir, epochs, batch_size, image_size, mode)
         self._create_result_folder()
         self.steps_per_epochs = steps_per_epochs
 
@@ -49,7 +50,7 @@ class AdaIN(Algorithm):
 
         self.style_weight = style_weight
 
-        if self.content_dir != "" and self.style_dir != "":
+        if self.mode == 'train':
             self.data_loader = ArbitraryDataLoader(content_path=self.content_dir, style_path=self.style_dir)
             self.train_ds, self.test_ds = self.data_loader.as_dataset(
                 preprocess_func=decode_and_resize,
@@ -61,25 +62,26 @@ class AdaIN(Algorithm):
         if checkpoint:
             self.model.load_weights(checkpoint)
 
-        self.monitors = [
-            DisplayMonitor(
-                self.model_name,
-                self.test_ds
-            ),
-            ModelCheckpoint(
-                filepath=f'{self.model_name}/model_checkpoints/{self.model_name}_{self.epochs}.cpkt',
-                save_weights_only=True,
-                monitor='val_total_loss',
-                mode='min',
-                save_best_only=True,
-                save_freq='epoch'
-            ),
-            CSVLogger(
-                f'{self.model_name}-{self.epochs}-{self.batch_size}.csv',
-                append=True,
-                separator=';'
-            )
-        ]
+        if self.mode == 'train':
+            self.monitors = [
+                DisplayMonitor(
+                    self.model_name,
+                    self.test_ds
+                ),
+                ModelCheckpoint(
+                    filepath=f'{self.model_name}/model_checkpoints/{self.model_name}_{self.epochs}.ckpt',
+                    save_weights_only=True,
+                    monitor='val_total_loss',
+                    mode='min',
+                    save_best_only=True,
+                    save_freq='epoch'
+                ),
+                CSVLogger(
+                    f'{self.model_name}-{self.epochs}-{self.batch_size}.csv',
+                    append=True,
+                    separator=';'
+                )
+            ]
 
     def build_model(self) -> tf.keras.Model:
         model = AdaptiveInstanceNorm(

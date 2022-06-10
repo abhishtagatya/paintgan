@@ -3,7 +3,14 @@ import os
 
 class Algorithm:
 
-    def __init__(self, content_dir, style_dir, epochs=1, batch_size=1, image_size=(256, 256)):
+    def __init__(self,
+                 content_dir,
+                 style_dir,
+                 epochs=1,
+                 batch_size=1,
+                 image_size=(256, 256),
+                 mode='train'
+                 ):
 
         self.model_name = self._set_class_name()
 
@@ -15,6 +22,8 @@ class Algorithm:
         self.epochs = epochs
         self.batch_size = batch_size
         self.image_size = image_size
+
+        self.mode = mode
 
     def evaluate(self, content, style):
         pass
