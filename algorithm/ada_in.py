@@ -111,14 +111,19 @@ class AdaIN(Algorithm):
         return history
 
     def evaluate(self, content, style, save_filename='img.jpg', size=(256, 256)):
-        content_image = (
-            tf.data.Dataset.from_tensor_slices([content])
-            .map(decode_and_resize, num_parallel_calls=tf.data.AUTOTUNE)
+        content_image = decode_and_resize(content)
+        content_image = tf.convert_to_tensor(
+            tf.reshape(
+                content_image, (1, *content_image.shape)
+            ), dtype=tf.float32
         )
-        style_image = (
-            tf.data.Dataset.from_tensor_slices([style])
-            .map(decode_and_resize, num_parallel_calls=tf.data.AUTOTUNE)
+
+        style_image = decode_and_resize(style)
+        style_image = tf.convert_to_tensor(
+            tf.reshape(
+                style_image, (1, *style_image.shape)
+            ), dtype=tf.float32
         )
 
         recon_image = self.model.inference(content_image, style_image)
-        keras.preprocessing.image.save_img(save_filename, recon_image)
+        keras.preprocessing.image.save_img(save_filename, recon_image[0])
