@@ -116,7 +116,7 @@ class AdaptiveInstanceNorm(tf.keras.Model):
 
     def inference(self, content, style):
         style_encoded = self.encoder(style)
-        content_encoded = self.decoder(content)
+        content_encoded = self.encoder(content)
 
         t = ada_in_func(style=style_encoded, content=content_encoded)
 
