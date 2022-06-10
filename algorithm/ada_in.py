@@ -119,9 +119,6 @@ class AdaIN(Algorithm):
             tf.data.Dataset.from_tensor_slices([style])
             .map(decode_and_resize, num_parallel_calls=tf.data.AUTOTUNE)
         )
-        image_set = (
-            tf.data.Dataset.zip((content_image, style_image))
-        )
-        print(len(image_set), image_set)
-        recon_image = self.model.inference(image_set)
+
+        recon_image = self.model.inference(content_image, style_image)
         keras.preprocessing.image.save_img(save_filename, recon_image)
