@@ -112,11 +112,11 @@ class AdaIN(Algorithm):
 
     def evaluate(self, content, style, save_filename='img.jpg', size=(256, 256)):
         content_image = (
-            tf.data.Dataset.from_tensor_slices(content)
+            tf.data.Dataset.from_tensor_slices([content])
             .map(decode_and_resize, num_parallel_calls=tf.data.AUTOTUNE)
         )
         style_image = (
-            tf.data.Dataset.from_tensor_slices(style)
+            tf.data.Dataset.from_tensor_slices([style])
             .map(decode_and_resize, num_parallel_calls=tf.data.AUTOTUNE)
         )
         image_set = (
