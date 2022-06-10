@@ -14,7 +14,8 @@ if __name__ == '__main__':
 
     if args.model == 'adain':
         model = AdaIN(
-            checkpoint=args.checkpoint
+            checkpoint=args.checkpoint,
+            mode='inference'
         )
         model.evaluate(
             content=args.content,
