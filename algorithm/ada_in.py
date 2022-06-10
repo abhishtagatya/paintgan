@@ -120,5 +120,11 @@ class AdaIN(Algorithm):
             .map(decode_and_resize, num_parallel_calls=tf.data.AUTOTUNE)
         )
 
-        recon_image = self.model.inference(content_image, style_image)
+        image_set = (
+            tf.data.Dataset.zip((content_image, style_image))
+        )
+
+        content_c, style_c = image_set.take(1)
+
+        recon_image = self.model.inference(content_c, style_c)
         keras.preprocessing.image.save_img(save_filename, recon_image)
