@@ -9,6 +9,8 @@
     Original Implementation : https://github.com/xunhuang1995/AdaIN-style (Lua)
     Reference : https://keras.io/examples/generative/adain/#downloading-the-dataset-from-kaggle
 """
+import os.path
+
 import tensorflow as tf
 from keras.callbacks import CSVLogger
 
@@ -57,8 +59,8 @@ class AdaIN(Algorithm):
             self.model.load_weights(checkpoint)
 
         self.monitors = [
-            DisplayMonitor('model_results', self.test_ds),
-            CheckpointMonitor('model_checkpoints', checkpoint_per=10),
+            DisplayMonitor(__name__, self.test_ds),
+            CheckpointMonitor(__name__, checkpoint_per=10),
             CSVLogger(f'{__name__}_p365-{self.epochs}-{self.batch_size}.csv', append=True, separator=';')
         ]
 
