@@ -57,6 +57,7 @@ class AdaIN(Algorithm):
                 batch_size=self.batch_size
             )
 
+        print(f'Creating Model {self.model_name}')
         self.model = self.build_model()
 
         if checkpoint:
