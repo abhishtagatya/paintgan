@@ -12,6 +12,7 @@
 import os.path
 
 import tensorflow as tf
+from tensorflow import keras
 from keras.callbacks import CSVLogger, ModelCheckpoint
 
 from algorithm.base import Algorithm
@@ -26,16 +27,18 @@ from util.data_loader import ArbitraryDataLoader
 class AdaIN(Algorithm):
 
     def __init__(self,
-                 content_dir,
-                 style_dir,
+                 content_dir='',
+                 style_dir='',
                  epochs=1,
                  batch_size=32,
                  steps_per_epochs=100,
                  image_size=(256, 256),
                  style_weight=4.0,
-                 checkpoint=None):
+                 checkpoint=None,
+                 ):
         super(AdaIN, self).__init__(content_dir, style_dir, epochs, batch_size, image_size)
 
+        self._create_result_folder()
         self.steps_per_epochs = steps_per_epochs
 
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=1e-5)
@@ -47,11 +50,12 @@ class AdaIN(Algorithm):
 
         self.style_weight = style_weight
 
-        self.data_loader = ArbitraryDataLoader(content_path=self.content_dir, style_path=self.style_dir)
-        self.train_ds, self.test_ds = self.data_loader.as_dataset(
-            preprocess_func=decode_and_resize,
-            batch_size=self.batch_size
-        )
+        if self.content_dir == "" or self.style_dir == "":
+            self.data_loader = ArbitraryDataLoader(content_path=self.content_dir, style_path=self.style_dir)
+            self.train_ds, self.test_ds = self.data_loader.as_dataset(
+                preprocess_func=decode_and_resize,
+                batch_size=self.batch_size
+            )
 
         self.model = self.build_model()
 
@@ -104,3 +108,10 @@ class AdaIN(Algorithm):
         )
 
         return history
+
+    def evaluate(self, content, style, save_filename='img.jpg', size=(256, 256)):
+        style_image = decode_and_resize(style, size)
+        content_image = decode_and_resize(content, size)
+
+        recon_image = self.model.inference(content=content_image, style=style_image)
+        keras.preprocessing.image.save_img(save_filename, recon_image)

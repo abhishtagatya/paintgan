@@ -16,9 +16,7 @@ class Algorithm:
         self.batch_size = batch_size
         self.image_size = image_size
 
-        self._create_result_folder()
-
-    def evaluate(self):
+    def evaluate(self, content, style):
         pass
 
     def train(self):
@@ -35,7 +33,8 @@ class Algorithm:
     def _create_result_folder(cls):
         sub_folder_names = [
             'model_results',
-            'model_checkpoints'
+            'model_checkpoints',
+            'model_inferences'
         ]
         for names in sub_folder_names:
             os.makedirs(os.path.join(cls.__name__, names), exist_ok=True)

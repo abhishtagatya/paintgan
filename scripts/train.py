@@ -15,6 +15,14 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    # Mapping
+    model = args.model
+    content = args.content
+    style = args.style
+    epochs = args.epochs if args.epochs is not None else 1
+    steps_per_epoch = args.steps_per_epoch if args.steps_per_epoch is not None else 1
+    batch_size = args.batch_size if args.batch_size is not None else 1
+
     if args.model == 'adain':
         model = AdaIN(
             content_dir=args.content,
