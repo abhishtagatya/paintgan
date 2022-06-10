@@ -59,9 +59,9 @@ class AdaIN(Algorithm):
             self.model.load_weights(checkpoint)
 
         self.monitors = [
-            DisplayMonitor(__name__, self.test_ds),
-            CheckpointMonitor(__name__, checkpoint_per=10),
-            CSVLogger(f'{__name__}-{self.epochs}-{self.batch_size}.csv', append=True, separator=';')
+            DisplayMonitor(self.__name__, self.test_ds),
+            CheckpointMonitor(self.__name__, checkpoint_per=10),
+            CSVLogger(f'{self.__name__}-{self.epochs}-{self.batch_size}.csv', append=True, separator=';')
         ]
 
     def build_model(self) -> tf.keras.Model:
