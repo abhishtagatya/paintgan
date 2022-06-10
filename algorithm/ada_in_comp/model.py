@@ -114,7 +114,9 @@ class AdaptiveInstanceNorm(tf.keras.Model):
             "total_loss": self.total_loss_tracker.result()
         }
 
-    def inference(self, content, style):
+    def inference(self, inputs):
+        content, style = inputs
+
         style_encoded = self.encoder(style)
         content_encoded = self.encoder(content)
 
