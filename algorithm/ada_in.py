@@ -51,6 +51,7 @@ class AdaIN(Algorithm):
         self.style_weight = style_weight
 
         if self.content_dir == "" or self.style_dir == "":
+            print(f'Loading Dataset from {self.content_dir} and {self.style_dir}')
             self.data_loader = ArbitraryDataLoader(content_path=self.content_dir, style_path=self.style_dir)
             self.train_ds, self.test_ds = self.data_loader.as_dataset(
                 preprocess_func=decode_and_resize,
