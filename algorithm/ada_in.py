@@ -12,7 +12,7 @@
 import os.path
 
 import tensorflow as tf
-from keras.callbacks import CSVLogger
+from keras.callbacks import CSVLogger, ModelCheckpoint
 
 from algorithm.base import Algorithm
 
@@ -59,9 +59,21 @@ class AdaIN(Algorithm):
             self.model.load_weights(checkpoint)
 
         self.monitors = [
-            DisplayMonitor(self.model_name, self.test_ds),
-            CheckpointMonitor(self.model_name, checkpoint_per=10),
-            CSVLogger(f'{self.model_name}-{self.epochs}-{self.batch_size}.csv', append=True, separator=';')
+            DisplayMonitor(
+                self.model_name,
+                self.test_ds
+            ),
+            ModelCheckpoint(
+                filepath=f'{self.model_name}/model_checkpoints',
+                save_weights_only='val_total_loss',
+                mode='min',
+                save_best_only=True
+            ),
+            CSVLogger(
+                f'{self.model_name}-{self.epochs}-{self.batch_size}.csv',
+                append=True,
+                separator=';'
+            )
         ]
 
     def build_model(self) -> tf.keras.Model:

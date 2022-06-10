@@ -22,23 +22,23 @@ class DisplayMonitor(tf.keras.callbacks.Callback):
         self.model_name = model_name
         self.dataset = dataset
 
+        self.test_content, self.test_style = next(iter(self.dataset))
+
     def on_epoch_end(self, epoch, logs=None):
         # Encode the style and content image
 
-        test_content, test_style = next(iter(self.dataset))
-
-        test_style_encoded = self.model.encoder(test_style)
-        test_content_encoded = self.model.encoder(test_content)
+        test_style_encoded = self.model.encoder(self.test_style)
+        test_content_encoded = self.model.encoder(self.test_content)
 
         test_t = ada_in_func(style=test_style_encoded, content=test_content_encoded)
         test_recon_image = self.model.decoder(test_t)
 
         # Plot the style, content, image
         fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(20, 5))
-        ax[0].imshow(tf.keras.preprocessing.image.array_to_img(test_style[0]))
+        ax[0].imshow(tf.keras.preprocessing.image.array_to_img(self.test_style[0]))
         ax[0].set_title(f"Style: {epoch + 1:03d}")
 
-        ax[1].imshow(tf.keras.preprocessing.image.array_to_img(test_content[0]))
+        ax[1].imshow(tf.keras.preprocessing.image.array_to_img(self.test_content[0]))
         ax[1].set_title(f"Content: {epoch + 1:03d}")
 
         ax[2].imshow(tf.keras.preprocessing.image.array_to_img(test_recon_image[0]))
