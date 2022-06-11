@@ -47,8 +47,7 @@ if __name__ == '__main__':
         model = CycleGAN(
             content_dir=args.content,
             style_dir=args.style,
-            content_domain=args.content_domain,
-            style_domain=args.style_domain,
+            domain=args.style_domain,
             epochs=args.epochs,
             buffer_size=args.buffer_size,
             batch_size=args.batch_size,

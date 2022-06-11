@@ -29,8 +29,7 @@ class CycleGAN(Algorithm):
     def __init__(self,
                  content_dir='',
                  style_dir='',
-                 content_domain='',
-                 style_domain='',
+                 domain='',
                  epochs=1,
                  batch_size=1,
                  buffer_size=256,
@@ -41,8 +40,7 @@ class CycleGAN(Algorithm):
         super(CycleGAN, self).__init__(content_dir, style_dir, epochs, batch_size, image_size, mode)
         self._create_result_folder()
 
-        self.content_domain = content_domain
-        self.style_domain = style_domain
+        self.style_domain = domain
 
         self.buffer_size = buffer_size
 
@@ -89,7 +87,6 @@ class CycleGAN(Algorithm):
             self.data_loader = DomainDataLoader(
                 content_path=self.content_dir,
                 style_path=self.style_dir,
-                content_domain=self.content_domain,
                 style_domain=self.style_domain
             )
             self.train_ds, self.test_ds = self.data_loader.as_dataset(
