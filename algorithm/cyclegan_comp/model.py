@@ -246,7 +246,7 @@ class CycleGenAdvNet(tf.keras.Model):
             self.model_checkpoint.restore(self.checkpoint_manager.latest_checkpoint)
 
     def inference(self, content):
-        pred = self.model.gen_G(content)[0].numpy()
+        pred = self.gen_G(content)[0].numpy()
         pred = (pred * 127 + 127.5).astype(np.uint8)
 
         return pred
