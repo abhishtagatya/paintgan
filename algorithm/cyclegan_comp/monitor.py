@@ -24,7 +24,7 @@ class DisplayMonitor(tf.keras.callbacks.Callback):
         self.domain = domain
         self.dataset = dataset
 
-        self.select_image = self.dataset.take(1)
+        self.select_image = self.dataset.take(1)[0]
 
     def on_epoch_end(self, epoch, logs=None):
         _, ax = plt.subplots(1, 2, figsize=(12, 12))
