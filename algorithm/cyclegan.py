@@ -64,12 +64,14 @@ class CycleGAN(Algorithm):
         )
 
         self.disc_X = get_discriminator(
+            name='discriminator_X',
             image_size=self.image_size,
             kernel_initializer=self.kernel_init,
             gamma_initializer=self.gamma_init
         )
 
         self.disc_Y = get_discriminator(
+            name='discriminator_Y',
             image_size=self.image_size,
             kernel_initializer=self.kernel_init,
             gamma_initializer=self.gamma_init
