@@ -126,4 +126,4 @@ class AdaIN(Algorithm):
         )
 
         recon_image = self.model.inference(content_image, style_image)
-        keras.preprocessing.image.save_img(save_filename, recon_image[0])
+        keras.preprocessing.image.save_img(f'model_inferences/{save_filename}', recon_image[0])

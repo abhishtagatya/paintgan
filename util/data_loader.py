@@ -157,11 +157,108 @@ class ArbitraryDataLoader(BaseDataLoader):
 
 class DomainDataLoader(BaseDataLoader):
 
-    def __init__(self, content_path, style_path, ignore_sub_folder=False):
+    def __init__(self, content_path, style_path, content_domain='', style_domain='', recursive=True):
         super(DomainDataLoader, self).__init__(
             content_path,
             style_path,
         )
 
-    def load_as_dataset(self):
-        pass
+        self.content_list = glob.glob(self.content_path + '/**/*.jpg', recursive=recursive)
+        self.style_list = glob.glob(self.style_path + '/**/*.jpg', recursive=recursive)
+
+        self.content_list = self.remove_corrupt(self.content_list)
+        self.style_list = self.remove_corrupt(self.style_list)
+
+        self.total_content = len(self.content_list)
+        self.total_style = len(self.style_list)
+
+        self.content_domain = content_domain
+        self.style_domain = style_domain
+
+        if self.content_domain != '':
+            self.content_list = self.domain_selection(self.content_list, self.content_domain)
+
+        if self.style_domain != '':
+            self.style_list = self.domain_selection(self.style_list, self.style_domain)
+
+    @staticmethod
+    def domain_selection(image_list, domain):
+        new_list = []
+        for image in image_list:
+            if domain in image:
+                new_list.append(image)
+        return new_list
+
+    def as_dataset(self,
+                   preprocess_func_train,
+                   preprocess_func_test,
+                   batch_size=1,
+                   buffer_size=1,
+                   val_split=0.2,
+                   auto_tune=tf.data.AUTOTUNE
+                   ):
+        """
+            Load class as a Designated Dataset
+
+            :param preprocess_func_train: Image Preprocessing Function
+            :param preprocess_func_test: Image Preprocessing Function
+            :param batch_size: Batch Size of Dataset
+            :param buffer_size: Buffer Size of Dataset
+            :param val_split: Split between Train and Validation
+            :param auto_tune: Auto Tune Dataset
+            :return: (Train, Validation) -> Tensorflow Dataset
+        """
+
+        # Splitting Content by Ratio
+        content_train = self.content_list[:int(self.total_content * (1.0 - val_split))]
+        content_val = self.content_list[int(self.total_content * (1.0 - val_split)):]
+        style_train = self.style_list[:int(self.total_style * (1.0 - val_split))]
+        style_val = self.style_list[int(self.total_style * (1.0 - val_split)):]
+
+        train_content_ds = (
+            tf.data.Dataset.from_tensor_slices(content_train)
+            .map(preprocess_func_train, num_parallel_calls=auto_tune)
+            .cache()
+            .shuffle(buffer_size)
+            .batch(batch_size)
+        )
+
+        val_content_ds = (
+            tf.data.Dataset.from_tensor_slices(content_val)
+            .map(preprocess_func_test, num_parallel_calls=auto_tune)
+            .cache()
+            .shuffle(buffer_size)
+            .batch(batch_size)
+        )
+
+        train_style_ds = (
+            tf.data.Dataset.from_tensor_slices(style_train)
+            .map(preprocess_func_train, num_parallel_calls=auto_tune)
+            .cache()
+            .shuffle(buffer_size)
+            .batch(batch_size)
+        )
+
+        val_style_ds = (
+            tf.data.Dataset.from_tensor_slices(style_val)
+            .map(preprocess_func_test, num_parallel_calls=auto_tune)
+            .cache()
+            .shuffle(buffer_size)
+            .batch(batch_size)
+        )
+
+        train_ds = (
+            tf.data.Dataset.zip((train_content_ds, train_style_ds))
+        )
+
+        val_ds = (
+            tf.data.Dataset.zip((val_content_ds, val_style_ds))
+        )
+
+        return train_ds, val_ds
+
+
+
+
+
+
