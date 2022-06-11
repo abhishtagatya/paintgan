@@ -98,8 +98,25 @@ class CycleGAN(Algorithm):
 
         self.model = self.build_model()
 
-        if checkpoint:
-            self.model.load_weights(checkpoint).expect_partial()
+        self.model_checkpoint = tf.train.Checkpoint(
+            gen_G=self.gen_G,
+            gen_F=self.gen_F,
+            disc_X=self.disc_X,
+            disc_Y=self.disc_Y,
+            gen_G_optimizer=self.gen_G_optimizer,
+            gen_F_optimizer=self.gen_F_optimizer,
+            disc_X_optimizer=self.disc_X_optimizer,
+            disc_Y_optimizer=self.disc_Y_optimizer
+        )
+
+        self.checkpoint_manager = tf.train.CheckpointManager(
+            self.model_checkpoint,
+            '',
+            max_to_keep=5
+        )
+
+        if checkpoint and self.checkpoint_manager.latest_checkpointt:
+            self.model_checkpoint.restore(self.checkpoint_manager.latest_checkpoint)
 
         if self.mode == 'train':
             self.monitors = [
@@ -108,13 +125,9 @@ class CycleGAN(Algorithm):
                     self.style_domain,
                     self.test_ds
                 ),
-                ModelCheckpoint(
-                    filepath=f'{self.model_name}/model_checkpoints/{self.model_name}-{self.style_domain}_{self.epochs}.ckpt',
-                    save_weights_only=False,
-                    monitor='val_total_loss',
-                    mode='min',
-                    save_best_only=True,
-                    save_freq='epoch'
+                CheckpointMonitor(
+                    self.model_name,
+                    self.style_domain,
                 ),
                 CSVLogger(
                     f'{self.model_name}_{self.style_domain}-{self.epochs}.csv',
