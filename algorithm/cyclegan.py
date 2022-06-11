@@ -148,6 +148,22 @@ class CycleGAN(Algorithm):
 
         return history
 
+    def evaluate(self, content, save_filename='img.jpg', size=(256, 256, 3)):
+        content_image = preprocess_test_image(content)
+
+        content_image = tf.reshape(
+            tf.convert_to_tensor(
+                content_image
+            ),
+            (1, *size)
+        )
+        recon_image = self.model.inference(content_image)
+
+        keras.preprocessing.image.save_img(f'model_inferences/{save_filename}', recon_image)
+
+
+
+
 
 
 

@@ -1,3 +1,5 @@
+import numpy as np
+
 import tensorflow as tf
 from tensorflow import keras
 
@@ -220,3 +222,10 @@ class CycleGenAdvNet(tf.keras.Model):
             "D_X_loss": disc_X_loss,
             "D_Y_loss": disc_Y_loss
         }
+
+    def inference(self, content):
+        pred = self.model.gen_G(content)[0].numpy()
+        pred = (pred * 127 + 127.5).astype(np.uint8)
+
+        return pred
+
