@@ -108,9 +108,13 @@ class CycleGAN(Algorithm):
                     self.style_domain,
                     self.test_ds
                 ),
-                CheckpointMonitor(
-                    self.model_name,
-                    self.style_domain
+                ModelCheckpoint(
+                    filepath=f'{self.model_name}/model_checkpoints/{self.model_name}-{self.style_domain}_{self.epochs}.ckpt',
+                    save_weights_only=False,
+                    monitor='val_total_loss',
+                    mode='min',
+                    save_best_only=True,
+                    save_freq='epoch'
                 ),
                 CSVLogger(
                     f'{self.model_name}_{self.style_domain}-{self.epochs}.csv',
