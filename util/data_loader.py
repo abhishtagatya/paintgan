@@ -169,9 +169,6 @@ class DomainDataLoader(BaseDataLoader):
         self.content_list = self.remove_corrupt(self.content_list)
         self.style_list = self.remove_corrupt(self.style_list)
 
-        self.total_content = len(self.content_list)
-        self.total_style = len(self.style_list)
-
         self.content_domain = content_domain
         self.style_domain = style_domain
 
@@ -180,6 +177,9 @@ class DomainDataLoader(BaseDataLoader):
 
         if self.style_domain != '':
             self.style_list = self.domain_selection(self.style_list, self.style_domain)
+
+        self.total_content = len(self.content_list)
+        self.total_style = len(self.style_list)
 
     @staticmethod
     def domain_selection(image_list, domain):

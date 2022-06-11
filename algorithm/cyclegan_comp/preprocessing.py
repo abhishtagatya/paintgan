@@ -8,6 +8,7 @@ def normalize_img(img):
 
 
 def preprocess_train_image(img, image_size=(256, 256, 3)):
+    print(img)
     img = tf.io.read_file(img)
     img = tf.image.decode_jpeg(img, channels=3)
     # Random flip
