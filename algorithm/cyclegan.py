@@ -83,6 +83,8 @@ class CycleGAN(Algorithm):
         self.gen_loss_fn = generator_loss_fn
         self.disc_loss_fn = discriminator_loss_fn
 
+        self.checkpoint_path = f'{self.model_name}/model_checkpoints'
+
         if self.mode == 'train':
             self.data_loader = DomainDataLoader(
                 content_path=self.content_dir,
@@ -98,25 +100,8 @@ class CycleGAN(Algorithm):
 
         self.model = self.build_model()
 
-        self.model_checkpoint = tf.train.Checkpoint(
-            gen_G=self.gen_G,
-            gen_F=self.gen_F,
-            disc_X=self.disc_X,
-            disc_Y=self.disc_Y,
-            gen_G_optimizer=self.gen_G_optimizer,
-            gen_F_optimizer=self.gen_F_optimizer,
-            disc_X_optimizer=self.disc_X_optimizer,
-            disc_Y_optimizer=self.disc_Y_optimizer
-        )
-
-        self.checkpoint_manager = tf.train.CheckpointManager(
-            self.model_checkpoint,
-            '',
-            max_to_keep=5
-        )
-
-        if checkpoint and self.checkpoint_manager.latest_checkpointt:
-            self.model_checkpoint.restore(self.checkpoint_manager.latest_checkpoint)
+        if checkpoint:
+            self.model.restore()
 
         if self.mode == 'train':
             self.monitors = [
@@ -128,6 +113,7 @@ class CycleGAN(Algorithm):
                 CheckpointMonitor(
                     self.model_name,
                     self.style_domain,
+                    self.model
                 ),
                 CSVLogger(
                     f'{self.model_name}_{self.style_domain}-{self.epochs}.csv',
@@ -141,7 +127,7 @@ class CycleGAN(Algorithm):
             generator_G=self.gen_G,
             generator_F=self.gen_F,
             discriminator_X=self.disc_X,
-            discriminator_Y=self.disc_Y
+            discriminator_Y=self.disc_Y,
         )
 
         model.compile(
@@ -150,7 +136,8 @@ class CycleGAN(Algorithm):
             disc_X_optimizer=self.disc_X_optimizer,
             disc_Y_optimizer=self.disc_Y_optimizer,
             gen_loss_fn=self.gen_loss_fn,
-            disc_loss_fn=self.disc_loss_fn
+            disc_loss_fn=self.disc_loss_fn,
+            checkpoint_path = self.checkpoint_path
         )
 
         return model

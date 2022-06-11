@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 class CheckpointMonitor(tf.keras.callbacks.Callback):
 
-    def __init__(self, model_name, domain, checkpoint_per=10):
+    def __init__(self, model_name, domain, model, checkpoint_per=10):
         self.model_name = model_name
         self.domain = domain
         self.checkpoint_per = checkpoint_per
@@ -14,8 +14,7 @@ class CheckpointMonitor(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         # Saving model checkpoint
         if (epoch + 1) % self.checkpoint_per == 0:
-            self.checkpoint_manager.save()
-            # self.model.save(f'{self.model_name}/model_checkpoints/{self.model_name}-{self.domain}_{epoch + 1}.ckpt')
+            self.model.checkpoint_manager.save()
 
 
 class DisplayMonitor(tf.keras.callbacks.Callback):

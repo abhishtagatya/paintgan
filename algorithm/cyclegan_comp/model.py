@@ -37,7 +37,8 @@ class CycleGenAdvNet(tf.keras.Model):
             disc_X_optimizer,
             disc_Y_optimizer,
             gen_loss_fn,
-            disc_loss_fn
+            disc_loss_fn,
+            checkpoint_path='',
     ):
         super(CycleGenAdvNet, self).compile()
         self.gen_G_optimizer = gen_G_optimizer
@@ -48,6 +49,23 @@ class CycleGenAdvNet(tf.keras.Model):
         self.discriminator_loss_fn = disc_loss_fn
         self.cycle_loss_fn = keras.losses.MeanAbsoluteError()
         self.identity_loss_fn = keras.losses.MeanAbsoluteError()
+
+        self.model_checkpoint = tf.train.Checkpoint(
+            gen_G=self.gen_G,
+            gen_F=self.gen_F,
+            disc_X=self.disc_X,
+            disc_Y=self.disc_Y,
+            gen_G_optimizer=self.gen_G_optimizer,
+            gen_F_optimizer=self.gen_F_optimizer,
+            disc_X_optimizer=self.disc_X_optimizer,
+            disc_Y_optimizer=self.disc_Y_optimizer
+        )
+
+        self.checkpoint_manager = tf.train.CheckpointManager(
+            self.model_checkpoint,
+            checkpoint_path,
+            max_to_keep=5
+        )
 
     def train_step(self, batch_data):
         # x is content and y is style
@@ -222,6 +240,9 @@ class CycleGenAdvNet(tf.keras.Model):
             "D_X_loss": disc_X_loss,
             "D_Y_loss": disc_Y_loss
         }
+
+    def restore_checkpoint(self):
+        self.checkpoint_manager.restore(self.checkpoint_manager.latest_checkpoint)
 
     def inference(self, content):
         pred = self.model.gen_G(content)[0].numpy()
