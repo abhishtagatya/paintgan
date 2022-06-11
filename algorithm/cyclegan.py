@@ -101,7 +101,7 @@ class CycleGAN(Algorithm):
         self.model = self.build_model()
 
         if checkpoint:
-            self.model.restore()
+            self.model.restore_checkpoint()
 
         if self.mode == 'train':
             self.monitors = [
@@ -137,7 +137,7 @@ class CycleGAN(Algorithm):
             disc_Y_optimizer=self.disc_Y_optimizer,
             gen_loss_fn=self.gen_loss_fn,
             disc_loss_fn=self.disc_loss_fn,
-            checkpoint_path = self.checkpoint_path
+            checkpoint_path=self.checkpoint_path
         )
 
         return model
