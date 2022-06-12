@@ -158,13 +158,13 @@ class Gatys(Algorithm):
         recon_image = tf.squeeze(recon_image, axis=0)
 
         if self.mode == 'inference':
-            keras.preprocessing.image.save_img(f'{self.model_name}/inferences/{save_filename}', recon_image[0])
+            keras.preprocessing.image.save_img(f'{self.model_name}/inferences/{save_filename}', recon_image)
 
         if self.mode == 'evaluate':
             save_name = self.content_dir.rsplit(".", 1)[0].split('/')[-1] + '_stylized_' + save_filename
-            keras.preprocessing.image.save_img(f'{self.model_name}/evaluates/{save_name}', recon_image[0])
+            keras.preprocessing.image.save_img(f'{self.model_name}/evaluates/{save_name}', recon_image)
 
-        keras.preprocessing.image.save_img(f'{save_filename}', recon_image[0])
+        keras.preprocessing.image.save_img(f'{save_filename}', recon_image)
 
 
 

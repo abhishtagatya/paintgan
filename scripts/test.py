@@ -41,6 +41,7 @@ if __name__ == '__main__':
             content_dir=args.content,
             style_dir=args.style,
             epochs=10,
+            mode='inference'
         )
 
         model.evaluate(

@@ -58,7 +58,8 @@ if __name__ == '__main__':
             model = Gatys(
                 content_dir=os.path.join(args.content_dir, eval_img),
                 style_dir=style_path,
-                epochs=10
+                epochs=10,
+                mode='evaluate'
             )
 
             model.evaluate(
