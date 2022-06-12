@@ -35,7 +35,7 @@ if __name__ == '__main__':
             content_dir=args.content,
             style_dir=args.style,
             epochs=args.epochs,
-            steps_per_epochs=args.steps_per_epoch,
+            steps_per_epoch=args.steps_per_epoch,
             batch_size=args.batch_size,
         )
         model.train()
