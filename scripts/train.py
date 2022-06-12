@@ -2,6 +2,7 @@ import argparse
 
 import tensorflow as tf
 
+from algorithm.gatys import Gatys
 from algorithm.ada_in import AdaIN
 from algorithm.cyclegan import CycleGAN
 
@@ -51,6 +52,15 @@ if __name__ == '__main__':
             epochs=args.epochs,
             buffer_size=args.buffer_size,
             batch_size=args.batch_size,
+        )
+
+        model.train()
+
+    if args.model == 'gatys':
+        model = Gatys(
+            content_dir=args.content,
+            style_dir=args.style,
+            epochs=args.epochs,
         )
 
         model.train()

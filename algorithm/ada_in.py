@@ -31,7 +31,7 @@ class AdaIN(Algorithm):
                  style_dir='',
                  epochs=1,
                  batch_size=32,
-                 steps_per_epochs=100,
+                 steps_per_epoch=100,
                  image_size=(256, 256),
                  style_weight=4.0,
                  checkpoint=None,
@@ -39,7 +39,7 @@ class AdaIN(Algorithm):
                  ):
         super(AdaIN, self).__init__(content_dir, style_dir, epochs, batch_size, image_size, mode)
         self._create_result_folder()
-        self.steps_per_epochs = steps_per_epochs
+        self.steps_per_epoch = steps_per_epoch
 
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=1e-5)
         self.loss_fn = tf.keras.losses.MeanSquaredError()
@@ -102,9 +102,9 @@ class AdaIN(Algorithm):
         history = self.model.fit(
             self.train_ds,
             epochs=self.epochs,
-            steps_per_epoch=self.steps_per_epochs,
+            steps_per_epoch=self.steps_per_epoch,
             validation_data=self.test_ds,
-            validation_steps=self.steps_per_epochs,
+            validation_steps=self.steps_per_epoch,
             callbacks=self.monitors
         )
 

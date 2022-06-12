@@ -116,40 +116,40 @@ class ArbitraryDataLoader(BaseDataLoader):
 
         train_content_ds = (
             tf.data.Dataset.from_tensor_slices(content_train)
-            .map(preprocess_func, num_parallel_calls=auto_tune)
-            .repeat()
+                .map(preprocess_func, num_parallel_calls=auto_tune)
+                .repeat()
         )
 
         val_content_ds = (
             tf.data.Dataset.from_tensor_slices(content_val)
-            .map(preprocess_func, num_parallel_calls=auto_tune)
-            .repeat()
+                .map(preprocess_func, num_parallel_calls=auto_tune)
+                .repeat()
         )
 
         train_style_ds = (
             tf.data.Dataset.from_tensor_slices(style_train)
-            .map(preprocess_func, num_parallel_calls=auto_tune)
-            .repeat()
+                .map(preprocess_func, num_parallel_calls=auto_tune)
+                .repeat()
         )
 
         val_style_ds = (
             tf.data.Dataset.from_tensor_slices(style_val)
-            .map(preprocess_func, num_parallel_calls=auto_tune)
-            .repeat()
+                .map(preprocess_func, num_parallel_calls=auto_tune)
+                .repeat()
         )
 
         train_ds = (
             tf.data.Dataset.zip((train_content_ds, train_style_ds))
-            .shuffle(batch_size * 2)
-            .batch(batch_size)
-            .prefetch(auto_tune)
+                .shuffle(batch_size * 2)
+                .batch(batch_size)
+                .prefetch(auto_tune)
         )
 
         val_ds = (
             tf.data.Dataset.zip((val_content_ds, val_style_ds))
-            .shuffle(batch_size * 2)
-            .batch(batch_size)
-            .prefetch(auto_tune)
+                .shuffle(batch_size * 2)
+                .batch(batch_size)
+                .prefetch(auto_tune)
         )
 
         return train_ds, val_ds
@@ -217,34 +217,34 @@ class DomainDataLoader(BaseDataLoader):
 
         train_content_ds = (
             tf.data.Dataset.from_tensor_slices(content_train)
-            .map(preprocess_func_train, num_parallel_calls=auto_tune)
-            .cache()
-            .shuffle(buffer_size)
-            .batch(batch_size)
+                .map(preprocess_func_train, num_parallel_calls=auto_tune)
+                .cache()
+                .shuffle(buffer_size)
+                .batch(batch_size)
         )
 
         val_content_ds = (
             tf.data.Dataset.from_tensor_slices(content_val)
-            .map(preprocess_func_test, num_parallel_calls=auto_tune)
-            .cache()
-            .shuffle(buffer_size)
-            .batch(batch_size)
+                .map(preprocess_func_test, num_parallel_calls=auto_tune)
+                .cache()
+                .shuffle(buffer_size)
+                .batch(batch_size)
         )
 
         train_style_ds = (
             tf.data.Dataset.from_tensor_slices(style_train)
-            .map(preprocess_func_train, num_parallel_calls=auto_tune)
-            .cache()
-            .shuffle(buffer_size)
-            .batch(batch_size)
+                .map(preprocess_func_train, num_parallel_calls=auto_tune)
+                .cache()
+                .shuffle(buffer_size)
+                .batch(batch_size)
         )
 
         val_style_ds = (
             tf.data.Dataset.from_tensor_slices(style_val)
-            .map(preprocess_func_test, num_parallel_calls=auto_tune)
-            .cache()
-            .shuffle(buffer_size)
-            .batch(batch_size)
+                .map(preprocess_func_test, num_parallel_calls=auto_tune)
+                .cache()
+                .shuffle(buffer_size)
+                .batch(batch_size)
         )
 
         train_ds = (
@@ -256,9 +256,3 @@ class DomainDataLoader(BaseDataLoader):
         )
 
         return train_ds, val_ds
-
-
-
-
-
-
