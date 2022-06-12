@@ -43,7 +43,8 @@ class Algorithm:
         sub_folder_names = [
             'results',
             'checkpoints',
-            'score_set'
+            'score_set',
+            'inferences'
         ]
         for names in sub_folder_names:
             os.makedirs(os.path.join(cls.__name__, names), exist_ok=True)

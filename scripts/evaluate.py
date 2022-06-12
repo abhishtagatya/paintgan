@@ -27,4 +27,4 @@ if __name__ == '__main__':
         style_path = args.style
 
         for eval_img in eval_paths:
-            model.evaluate(eval_img, style_path, save_filename=args.save_file)
+            model.evaluate(os.path.join(args.content_dir, eval_img), style_path, save_filename=args.save_file)
