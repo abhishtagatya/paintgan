@@ -1,6 +1,7 @@
 import argparse
 import os.path
 
+from algorithm.gatys import Gatys
 from algorithm.ada_in import AdaIN
 from algorithm.cyclegan import CycleGAN
 
@@ -41,7 +42,29 @@ if __name__ == '__main__':
         eval_paths = os.listdir(args.content_dir)
 
         for eval_img in eval_paths:
-            model.evaluate(os.path.join(args.content_dir, eval_img))
+            model.evaluate(
+                os.path.join(args.content_dir, eval_img),
+                save_filename=args.save_file
+            )
+
+    if args.model == 'gatys':
+        if not os.path.exists(args.content_dir) or not os.path.exists(args.style):
+            raise FileNotFoundError(f"Content Directory or Style is not Found : {args.content_dir}, {args.style}")
+
+        eval_paths = os.listdir(args.content_dir)
+        style_path = args.style
+
+        for eval_img in eval_paths:
+            model = Gatys(
+                content_dir=os.path.join(args.content_dir, eval_img),
+                style_dir=style_path,
+                epochs=10
+            )
+
+            model.evaluate(
+                save_filename=args.save_file
+            )
+
 
 
 

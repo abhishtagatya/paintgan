@@ -25,7 +25,7 @@ class Algorithm:
 
         self.mode = mode
 
-    def evaluate(self, content, style):
+    def evaluate(self):
         pass
 
     def train(self):

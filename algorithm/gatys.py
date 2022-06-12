@@ -57,9 +57,8 @@ class Gatys(Algorithm):
         self.num_content_layers = len(self.content_layers)
         self.num_style_layers = len(self.style_layers)
 
-        if self.mode == 'train':
-            self.content_image = preprocess_image(self.content_dir)
-            self.style_image = preprocess_image(self.style_dir)
+        self.content_image = preprocess_image(self.content_dir)
+        self.style_image = preprocess_image(self.style_dir)
 
         self.build_model()
 
@@ -116,34 +115,56 @@ class Gatys(Algorithm):
 
         for epoch in range(self.epochs):
 
-            print(f'\nEpoch {epoch + 1}/{self.epochs}')
-            pb_i = Progbar(self.steps_per_epoch, stateful_metrics=[
-                'style_loss', 'content_loss', 'total_loss'
-            ])
+            if self.mode == 'train':
+                print(f'\nEpoch {epoch + 1}/{self.epochs}')
+                pb_i = Progbar(self.steps_per_epoch, stateful_metrics=[
+                    'style_loss', 'content_loss', 'total_loss'
+                ])
 
             for steps in range(self.steps_per_epoch):
                 self.train_step(image)
-                metric_values = [
-                    ('style_loss', self.train_style_loss_metric.result()),
-                    ('content_loss', self.train_content_loss_metric.result()),
-                    ('total_loss', self.train_total_loss_metric.result())
-                ]
-                pb_i.add(1, values=metric_values)
+
+                if self.mode == 'train':
+                    metric_values = [
+                        ('style_loss', self.train_style_loss_metric.result()),
+                        ('content_loss', self.train_content_loss_metric.result()),
+                        ('total_loss', self.train_total_loss_metric.result())
+                    ]
+                    pb_i.add(1, values=metric_values)
 
             self.train_style_loss_metric.reset_states()
             self.train_content_loss_metric.reset_states()
             self.train_total_loss_metric.reset_states()
 
             # Train Monitors
-            fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(20, 5))
-            ax[0].imshow(tf.squeeze(self.style_image, axis=0))
-            ax[0].set_title(f"Style: {epoch + 1:03d}")
+            if self.mode == 'train':
+                fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(20, 5))
+                ax[0].imshow(tf.squeeze(self.style_image, axis=0))
+                ax[0].set_title(f"Style: {epoch + 1:03d}")
 
-            ax[1].imshow(tf.squeeze(self.content_image, axis=0))
-            ax[1].set_title(f"Content: {epoch + 1:03d}")
+                ax[1].imshow(tf.squeeze(self.content_image, axis=0))
+                ax[1].set_title(f"Content: {epoch + 1:03d}")
 
-            ax[2].imshow(tf.squeeze(image, axis=0))
-            ax[2].set_title(f"{self.model_name}: {epoch + 1:03d}")
+                ax[2].imshow(tf.squeeze(image, axis=0))
+                ax[2].set_title(f"{self.model_name}: {epoch + 1:03d}")
 
-            plt.savefig(f'{self.model_name}/results/{self.model_name}_{epoch + 1}.png', format='png')
-            plt.show()
+                plt.savefig(f'{self.model_name}/results/{self.model_name}_{epoch + 1}.png', format='png')
+                plt.show()
+
+        return image
+
+    def evaluate(self, save_filename='img.jpg'):
+        recon_image = self.train()
+        recon_image = tf.squeeze(recon_image, axis=0)
+
+        if self.mode == 'inference':
+            keras.preprocessing.image.save_img(f'{self.model_name}/inferences/{save_filename}', recon_image[0])
+
+        if self.mode == 'evaluate':
+            save_name = self.content_dir.rsplit(".", 1)[0].split('/')[-1] + '_stylized_' + save_filename
+            keras.preprocessing.image.save_img(f'{self.model_name}/evaluates/{save_name}', recon_image[0])
+
+        keras.preprocessing.image.save_img(f'{save_filename}', recon_image[0])
+
+
+
