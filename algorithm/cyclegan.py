@@ -163,7 +163,16 @@ class CycleGAN(Algorithm):
         )
         recon_image = self.model.inference(content_image)
 
-        keras.preprocessing.image.save_img(f'{self.model_name}/inferences/{save_filename}', recon_image)
+        if self.mode == 'inference':
+            keras.preprocessing.image.save_img(f'{self.model_name}/inferences/{save_filename}', recon_image)
+
+        if self.mode == 'evaluate':
+            save_name = content.rsplit(".", 1)[0].split('/')[-1] + '_stylized_' + self.style_domain + '.jpg'
+            keras.preprocessing.image.save_img(f'{self.model_name}/evaluates/{save_name}', recon_image)
+
+        keras.preprocessing.image.save_img(f'{save_filename}', recon_image)
+
+
 
 
 

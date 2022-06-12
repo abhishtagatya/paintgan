@@ -7,7 +7,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Train Model")
     parser.add_argument('--model', type=str, required=True)
     parser.add_argument('--content', type=str, required=True)
-    parser.add_argument('--style', type=str, required=True)
+    parser.add_argument('--style', type=str, required=False)
     parser.add_argument('--checkpoint', type=str, required=False)
     parser.add_argument('--save-file', type=str, required=False)
 

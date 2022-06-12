@@ -43,7 +43,7 @@ class Algorithm:
         sub_folder_names = [
             'results',
             'checkpoints',
-            'score_set',
+            'evaluates',
             'inferences'
         ]
         for names in sub_folder_names:

@@ -132,6 +132,6 @@ class AdaIN(Algorithm):
 
         if self.mode == 'evaluate':
             save_name = content.rsplit(".", 1)[0].split('/')[-1] + '_stylized_' + save_filename
-            keras.preprocessing.image.save_img(f'{self.model_name}/evaluate/{save_name}', recon_image[0])
+            keras.preprocessing.image.save_img(f'{self.model_name}/evaluates/{save_name}', recon_image[0])
 
         keras.preprocessing.image.save_img(f'{save_filename}', recon_image[0])

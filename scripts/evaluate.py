@@ -8,7 +8,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Train Model")
     parser.add_argument('--model', type=str, required=True)
     parser.add_argument('--content-dir', type=str, required=True)
-    parser.add_argument('--style', type=str, required=True)
+    parser.add_argument('--style', type=str, required=False)
     parser.add_argument('--checkpoint', type=str, required=False)
     parser.add_argument('--save-file', type=str, required=False)
 
@@ -28,3 +28,21 @@ if __name__ == '__main__':
 
         for eval_img in eval_paths:
             model.evaluate(os.path.join(args.content_dir, eval_img), style_path, save_filename=args.save_file)
+
+    if args.model == 'cyclegan':
+        model = CycleGAN(
+            checkpoint=args.checkpoint,
+            mode='evaluate'
+        )
+
+        if not os.path.exists(args.content_dir):
+            raise FileNotFoundError(f"Content Directory is not Found : {args.content_dir}")
+
+        eval_paths = os.listdir(args.content_dir)
+
+        for eval_img in eval_paths:
+            model.evaluate(os.path.join(args.content_dir, eval_img))
+
+
+
+
