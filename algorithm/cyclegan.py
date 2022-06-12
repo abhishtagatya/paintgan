@@ -83,7 +83,7 @@ class CycleGAN(Algorithm):
         self.gen_loss_fn = generator_loss_fn
         self.disc_loss_fn = discriminator_loss_fn
 
-        self.checkpoint_path = f'{self.model_name}/model_checkpoints'
+        self.checkpoint_path = f'{self.model_name}/checkpoints'
 
         if self.mode == 'train':
             self.data_loader = DomainDataLoader(
@@ -163,7 +163,7 @@ class CycleGAN(Algorithm):
         )
         recon_image = self.model.inference(content_image)
 
-        keras.preprocessing.image.save_img(f'model_inferences/{save_filename}', recon_image)
+        keras.preprocessing.image.save_img(f'{self.model_name}/inferences/{save_filename}', recon_image)
 
 
 

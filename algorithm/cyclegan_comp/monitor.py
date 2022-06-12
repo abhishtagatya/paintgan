@@ -46,7 +46,7 @@ class DisplayMonitor(tf.keras.callbacks.Callback):
         ax[2].imshow(pred)
         ax[2].set_title(f"Translated: {epoch + 1:03d}")
 
-        plt.savefig(f'{self.model_name}/model_results/{self.model_name}-{self.domain}_{epoch + 1}.png', format='png')
+        plt.savefig(f'{self.model_name}/results/{self.model_name}-{self.domain}_{epoch + 1}.png', format='png')
 
         plt.show()
         plt.close()

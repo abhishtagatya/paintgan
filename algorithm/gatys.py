@@ -12,7 +12,8 @@
 
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.utils import Progbar
+from keras.utils import Progbar
+from keras.callbacks import CSVLogger
 import matplotlib.pyplot as plt
 
 from algorithm.base import Algorithm
@@ -61,6 +62,12 @@ class Gatys(Algorithm):
             self.style_image = preprocess_image(self.style_dir)
 
         self.build_model()
+
+        # self.csv_monitor = CSVLogger(
+        #     f'{self.model_name}-{self.epochs}-{self.steps_per_epoch}.csv',
+        #     append=True,
+        #     separator=';'
+        # )
 
     def build_model(self):
         self.extractor = GatysFeatureExtractor(self.style_layers, self.content_layers)
@@ -138,5 +145,5 @@ class Gatys(Algorithm):
             ax[2].imshow(tf.squeeze(image, axis=0))
             ax[2].set_title(f"{self.model_name}: {epoch + 1:03d}")
 
-            plt.savefig(f'{self.model_name}/model_results/{self.model_name}_{epoch + 1}.png', format='png')
+            plt.savefig(f'{self.model_name}/results/{self.model_name}_{epoch + 1}.png', format='png')
             plt.show()

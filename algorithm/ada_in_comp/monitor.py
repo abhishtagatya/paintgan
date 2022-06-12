@@ -13,7 +13,7 @@ class CheckpointMonitor(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         # Saving model checkpoint
         if (epoch + 1) % self.checkpoint_per == 0:
-            self.model.save_weights(f'{self.model_name}/model_checkpoints/{self.model_name}_{epoch + 1}.ckpt')
+            self.model.save_weights(f'{self.model_name}/checkpoints/{self.model_name}_{epoch + 1}.ckpt')
 
 
 class DisplayMonitor(tf.keras.callbacks.Callback):
@@ -44,7 +44,7 @@ class DisplayMonitor(tf.keras.callbacks.Callback):
         ax[2].imshow(tf.keras.preprocessing.image.array_to_img(test_recon_image[0]))
         ax[2].set_title(f"{self.model_name}: {epoch + 1:03d}")
 
-        plt.savefig(f'{self.model_name}/model_results/{self.model_name}_{epoch + 1}.png', format='png')
+        plt.savefig(f'{self.model_name}/results/{self.model_name}_{epoch + 1}.png', format='png')
 
         plt.show()
         plt.close()

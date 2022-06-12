@@ -1,5 +1,4 @@
 import argparse
-import os.path
 
 from algorithm.ada_in import AdaIN
 from algorithm.cyclegan import CycleGAN
@@ -7,7 +6,7 @@ from algorithm.cyclegan import CycleGAN
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Train Model")
     parser.add_argument('--model', type=str, required=True)
-    parser.add_argument('--content-dir', type=str, required=True)
+    parser.add_argument('--content', type=str, required=True)
     parser.add_argument('--style', type=str, required=True)
     parser.add_argument('--checkpoint', type=str, required=False)
     parser.add_argument('--save-file', type=str, required=False)
@@ -17,14 +16,21 @@ if __name__ == '__main__':
     if args.model == 'adain':
         model = AdaIN(
             checkpoint=args.checkpoint,
-            mode='evaluate'
+            mode='inference'
+        )
+        model.evaluate(
+            content=args.content,
+            style=args.style,
+            save_filename=args.save_file
         )
 
-        if not os.path.exists(args.content_dir) or not os.path.exists(args.style):
-            raise FileNotFoundError(f"Content Directory or Style is not Found : {args.content_dir}, {args.style}")
+    if args.model == 'cyclegan':
+        model = CycleGAN(
+            checkpoint=args.checkpoint,
+            mode='inference'
+        )
 
-        eval_paths = os.listdir(args.content_dir)
-        style_path = args.style
-
-        for eval_img in eval_paths:
-            model.evaluate(eval_img, style_path, save_filename=args.save_file)
+        model.evaluate(
+            content=args.content,
+            save_filename=args.save_file
+        )

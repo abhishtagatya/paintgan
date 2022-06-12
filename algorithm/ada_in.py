@@ -69,7 +69,7 @@ class AdaIN(Algorithm):
                     self.test_ds
                 ),
                 ModelCheckpoint(
-                    filepath=f'{self.model_name}/model_checkpoints/{self.model_name}_{self.epochs}.ckpt',
+                    filepath=f'{self.model_name}/checkpoints/{self.model_name}_{self.epochs}.ckpt',
                     save_weights_only=True,
                     monitor='val_total_loss',
                     mode='min',
@@ -110,7 +110,7 @@ class AdaIN(Algorithm):
 
         return history
 
-    def evaluate(self, content, style, save_filename='img.jpg', size=(256, 256)):
+    def evaluate(self, content: str, style: str, save_filename='img.jpg', size=(256, 256)):
         content_image = decode_and_resize(content)
         content_image = tf.convert_to_tensor(
             tf.reshape(
@@ -126,4 +126,12 @@ class AdaIN(Algorithm):
         )
 
         recon_image = self.model.inference(content_image, style_image)
-        keras.preprocessing.image.save_img(f'model_inferences/{save_filename}', recon_image[0])
+
+        if self.mode == 'inference':
+            keras.preprocessing.image.save_img(f'{self.model_name}/inferences/{save_filename}', recon_image[0])
+
+        if self.mode == 'evaluate':
+            save_name = content.rsplit(".", 1)[0].split('/')[-1] + '_stylized_' + save_filename
+            keras.preprocessing.image.save_img(f'{self.model_name}/evaluate/{save_name}', recon_image[0])
+
+        keras.preprocessing.image.save_img(f'{save_filename}', recon_image[0])
