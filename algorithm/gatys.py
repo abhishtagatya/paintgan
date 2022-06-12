@@ -12,7 +12,7 @@
 
 import tensorflow as tf
 from tensorflow import keras
-from keras.utils import Progbar
+from tensorflow.keras.utils import Progbar
 from keras.callbacks import CSVLogger
 import matplotlib.pyplot as plt
 
