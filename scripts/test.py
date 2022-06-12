@@ -40,7 +40,7 @@ if __name__ == '__main__':
         model = Gatys(
             content_dir=args.content,
             style_dir=args.style,
-            epochs=args.epochs,
+            epochs=10,
         )
 
         model.evaluate(
