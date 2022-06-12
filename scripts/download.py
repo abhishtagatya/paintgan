@@ -71,6 +71,10 @@ def download_from_drive(data_dir: str, dataset_type: str, dataset_url=None):
         '80K': {
             'url': 'https://drive.google.com/u/0/uc?id=1JO6TPAcM1g3YZPxSCKecnoYaqEYG-laS',
             'name': 'paintgan-80k.zip'
+        },
+        'EVAL': {
+            'url': 'https://drive.google.com/u/0/uc?id=1LUOU2WkITkC9x7tBsAnJtCW3GmKlbnid',
+            'name': 'paintgan-eval.zip'
         }
     }
 
