@@ -68,9 +68,9 @@ class Gatys(Algorithm):
         self.style_targets = self.extractor(self.style_image)['style']
         self.content_targets = self.extractor(self.content_image)['content']
 
-        train_style_loss_metric = keras.metrics.Mean(name="style_loss")
-        train_content_loss_metric = keras.metrics.Mean(name="content_loss")
-        train_total_loss_metric = keras.metrics.Mean(name="total_loss")
+        self.train_style_loss_metric = keras.metrics.Mean(name="style_loss")
+        self.train_content_loss_metric = keras.metrics.Mean(name="content_loss")
+        self.train_total_loss_metric = keras.metrics.Mean(name="total_loss")
 
     @tf.function()
     def train_step(
