@@ -5,7 +5,7 @@ from algorithm.ada_in import AdaIN
 from algorithm.cyclegan import CycleGAN
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Train Model")
+    parser = argparse.ArgumentParser(description="Inference Model")
     parser.add_argument('--model', type=str, required=True)
     parser.add_argument('--content', type=str, required=True)
     parser.add_argument('--style', type=str, required=False)
