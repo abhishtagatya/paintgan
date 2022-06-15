@@ -79,6 +79,10 @@ def download_from_drive(data_dir: str, dataset_type: str, dataset_url=None):
         'EVAL_SET': {
             'url': 'https://drive.google.com/u/0/uc?id=1GS3bbN-fxY8fk9i0d6_moNyjSv7krhFy',
             'name': 'eval_set.hdf5'
+        },
+        'EVAL_MODEL': {
+            'url': 'https://drive.google.com/u/0/uc?id=1xm01AmH_OX_qGZJNSYmCTysGDaW4j2Aa',
+            'name': 'deception_model.h5'
         }
     }
 
@@ -87,7 +91,17 @@ def download_from_drive(data_dir: str, dataset_type: str, dataset_url=None):
         return
 
     if dataset_type == 'EVAL_SET':
-        gdown.download(dataset_drive['EVAL_SET']['url'], data_dir)
+        gdown.download(
+            dataset_drive['EVAL_SET']['url'],
+            dataset_drive['EVAL_SET']['name']
+        )
+        return
+
+    if dataset_type == 'EVAL_MODEL':
+        gdown.download(
+            dataset_drive['EVAL_MODEL']['url'],
+            dataset_drive['EVAL_MODEL']['name']
+        )
         return
 
     download_and_extract(
