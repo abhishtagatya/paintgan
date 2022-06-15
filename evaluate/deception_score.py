@@ -40,6 +40,7 @@ class DeceptionScore:
             ))
 
         df = pd.DataFrame(temp_list, columns=['Path', 'Artist'])
+        print(df)
         return df
 
     @staticmethod
