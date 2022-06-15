@@ -83,7 +83,7 @@ class CycleGAN(Algorithm):
         self.gen_loss_fn = generator_loss_fn
         self.disc_loss_fn = discriminator_loss_fn
 
-        self.checkpoint_path = f'{self.model_name}/checkpoints/{self.style_domain}_{self.epochs}.ckpt'
+        self.checkpoint_path = f'{self.model_name}/checkpoints/{self.style_domain}_{self.epochs}'
 
         if self.mode == 'train':
             self.data_loader = DomainDataLoader(
@@ -101,7 +101,7 @@ class CycleGAN(Algorithm):
         self.model = self.build_model()
 
         if checkpoint:
-            self.model.restore_checkpoint(checkpoint)
+            self.model.restore_checkpoint()
 
         if self.mode == 'train':
             self.monitors = [
