@@ -4,7 +4,7 @@ from tabulate import tabulate
 import numpy as np
 import pandas as pd
 
-import tensorflow
+import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.layers import Input, Conv2D
