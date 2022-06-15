@@ -67,9 +67,10 @@ class DeceptionScore:
     def score(self, eval_dir, class_name='Artist'):
         eval_files = os.listdir(eval_dir)
         eval_dataset = self._preprocess_eval_set(eval_files)
-        num_classes = len(eval_dataset[class_name].unique())
+        classes = list(eval_dataset[class_name].unique())
+        num_classes = len(classes)
 
-        eval_generator = self._generate_dataset(eval_dataset, num_classes)
+        eval_generator = self._generate_dataset(eval_dataset, classes)
 
         # Preprocess prediction
         y_pred = self.model.predict(eval_generator)
