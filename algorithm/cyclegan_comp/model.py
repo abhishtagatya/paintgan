@@ -241,9 +241,8 @@ class CycleGenAdvNet(tf.keras.Model):
             "D_Y_loss": disc_Y_loss
         }
 
-    def restore_checkpoint(self):
-        if self.checkpoint_manager.latest_checkpoint:
-            self.model_checkpoint.restore(self.checkpoint_manager.latest_checkpoint)
+    def restore_checkpoint(self, checkpoint_path):
+        self.model_checkpoint.restore(checkpoint_path)
 
     def inference(self, content):
         pred = self.gen_G(content)[0].numpy()
