@@ -84,6 +84,8 @@ class CycleGAN(Algorithm):
         self.disc_loss_fn = discriminator_loss_fn
 
         self.checkpoint_path = f'{self.model_name}/checkpoints/{self.style_domain}_{self.epochs}'
+        if checkpoint:
+            self.checkpoint_path = checkpoint
 
         if self.mode == 'train':
             self.data_loader = DomainDataLoader(
