@@ -81,7 +81,7 @@ class DeceptionScore:
         accuracy.update_state(eval_generator.classes, y_pred)
 
         # Logging
-        content = [self.model_name, accuracy.result().numpy(), len(os.listdir(eval_dir)), num_classes]
+        content = [[self.model_name, accuracy.result().numpy(), len(os.listdir(eval_dir)), num_classes]]
         print(tabulate(content, headers=['Model', 'Score', 'Num. Files', 'Num. Class']))
 
     @staticmethod
