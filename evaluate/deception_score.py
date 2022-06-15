@@ -31,16 +31,17 @@ class DeceptionScore:
         self.model = keras.models.load_model(checkpoint)
 
     @staticmethod
-    def _preprocess_eval_set(eval_files):
+    def _preprocess_eval_set(eval_dir):
+        eval_files = os.listdir(eval_dir)
         temp_list = []
+
         for file in eval_files:
             artist_label = file.split('_stylized_')[-1].replace('.jpg', '')
             temp_list.append((
-                file, artist_label
+                os.path.join(eval_files, file), artist_label
             ))
 
         df = pd.DataFrame(temp_list, columns=['Path', 'Artist'])
-        print(df)
         return df
 
     @staticmethod
@@ -66,8 +67,7 @@ class DeceptionScore:
         return val_generator
 
     def score(self, eval_dir, class_name='Artist'):
-        eval_files = os.listdir(eval_dir)
-        eval_dataset = self._preprocess_eval_set(eval_files)
+        eval_dataset = self._preprocess_eval_set(eval_dir)
         classes = list(eval_dataset[class_name].unique())
         num_classes = len(classes)
 
@@ -75,6 +75,7 @@ class DeceptionScore:
 
         # Preprocess prediction
         y_pred = self.model.predict(eval_generator)
+
         accuracy = tf.keras.metrics.SparseCategoricalAccuracy()
         accuracy.update_state(eval_generator.classes, y_pred)
 
