@@ -38,7 +38,7 @@ class DeceptionScore:
         for file in eval_files:
             artist_label = file.split('_stylized_')[-1].replace('.jpg', '')
             temp_list.append((
-                os.path.join(eval_files, file), artist_label
+                os.path.join(eval_dir, file), artist_label
             ))
 
         df = pd.DataFrame(temp_list, columns=['Path', 'Artist'])
