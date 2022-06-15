@@ -67,11 +67,12 @@ class DeceptionScore:
         return val_generator
 
     def score(self, eval_dir, class_name='Artist'):
-        eval_dataset = self._preprocess_eval_set(eval_dir)
-        classes = list(eval_dataset[class_name].unique())
+        eval_df = self._preprocess_eval_set(eval_dir)
+
+        classes = list(self.eval_dataset[class_name].unique())
         num_classes = len(classes)
 
-        eval_generator = self._generate_dataset(eval_dataset, classes)
+        eval_generator = self._generate_dataset(eval_df, classes)
 
         # Preprocess prediction
         y_pred = self.model.predict(eval_generator)
@@ -80,7 +81,7 @@ class DeceptionScore:
         accuracy.update_state(eval_generator.classes, y_pred)
 
         # Logging
-        content = [self.model_name, accuracy.result().numpy(), len(eval_files), num_classes]
+        content = [self.model_name, accuracy.result().numpy(), len(os.listdir(eval_dir)), num_classes]
         print(tabulate(content, headers=['Model', 'Score', 'Num. Files', 'Num. Class']))
 
     @staticmethod
