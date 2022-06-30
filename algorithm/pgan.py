@@ -106,9 +106,7 @@ class PaintGAN(Algorithm):
 
             for batch_i, (images_A, images_B) in enumerate(self.train_ds):
                 valid = np.ones((len(images_A),) + self.patch_disc)
-                fake = np.zeros((len(images_A),) + self.patch_disc)
-
-                print(len(images_A), valid.shape, len(images_B), fake.shape)
+                fake = np.zeros((len(images_B),) + self.patch_disc)
 
                 # Translates images to opposite domain
                 fake_B = self.model.generator_AB.predict(images_A)
