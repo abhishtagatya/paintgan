@@ -105,12 +105,15 @@ class PaintGAN(Algorithm):
             ])
 
             for batch_i, (images_A, images_B) in enumerate(self.train_ds):
-                valid = np.ones((len(images_A),) + self.patch_disc)
-                fake = np.zeros((len(images_B),) + self.patch_disc)
+
+                maxed = max(len(images_A), len(images_B))
+
+                valid = np.ones((maxed,) + self.patch_disc)
+                fake = np.zeros((maxed,) + self.patch_disc)
 
                 # Translates images to opposite domain
-                fake_B = self.model.generator_AB.predict(images_A)
-                fake_A = self.model.generator_BA.predict(images_B)
+                fake_B = self.model.generator_AB.predict(images_A[:maxed])
+                fake_A = self.model.generator_BA.predict(images_B[:maxed])
 
                 DA_loss_real = self.model.discriminator_A.train_on_batch(images_A, valid)
                 DA_loss_fake = self.model.discriminator_A.train_on_batch(fake_A, fake)
@@ -124,7 +127,9 @@ class PaintGAN(Algorithm):
 
                 G_loss = self.model.combined.train_on_batch(
                     [images_A, images_B],
-                    [valid, valid, images_B, images_A, images_A, images_B]
+                    [valid, valid,
+                     images_B, images_A,
+                     images_A, images_B]
                 )
 
                 self.D_Loss_metric.update_state(D_loss)
