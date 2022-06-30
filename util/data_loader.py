@@ -166,9 +166,6 @@ class DomainDataLoader(BaseDataLoader):
         self.content_list = glob.glob(self.content_path + '/**/*.jpg', recursive=recursive)
         self.style_list = glob.glob(self.style_path + '/**/*.jpg', recursive=recursive)
 
-        self.content_list = self.remove_corrupt(self.content_list)
-        self.style_list = self.remove_corrupt(self.style_list)
-
         self.content_domain = content_domain
         self.style_domain = style_domain
 
@@ -177,6 +174,9 @@ class DomainDataLoader(BaseDataLoader):
 
         if self.style_domain != '':
             self.style_list = self.domain_selection(self.style_list, self.style_domain)
+
+        self.content_list = self.remove_corrupt(self.content_list)
+        self.style_list = self.remove_corrupt(self.style_list)
 
         self.total_content = len(self.content_list)
         self.total_style = len(self.style_list)
