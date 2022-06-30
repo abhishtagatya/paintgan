@@ -40,7 +40,7 @@ class PaintGAN(Algorithm):
 
         self.style_domain = domain
 
-        patch = int(self.image_size[0] / 2**4)
+        patch = int(self.image_size[0] / 2 ** 4)
         self.patch_disc = (patch, patch, 1)
 
         self.disc_A = get_discriminator()
@@ -94,9 +94,6 @@ class PaintGAN(Algorithm):
 
     def train(self, checkpoint_per=10):
 
-        valid = np.ones((self.batch_size,) + self.patch_disc)
-        fake = np.zeros((self.batch_size,) + self.patch_disc)
-
         for epoch in range(self.epochs):
 
             dm = DisplayMonitor(self.model, self.model_name, self.style_domain, self.test_ds)
@@ -108,6 +105,8 @@ class PaintGAN(Algorithm):
             ])
 
             for batch_i, (images_A, images_B) in enumerate(self.train_ds):
+                valid = np.ones((len(images_A),) + self.patch_disc)
+                fake = np.zeros((len(images_A),) + self.patch_disc)
 
                 # Translates images to opposite domain
                 fake_B = self.model.generator_AB.predict(images_A)
