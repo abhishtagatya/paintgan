@@ -4,7 +4,7 @@ import tensorflow_addons as tfa
 
 
 def unet_conv2d(layer_input, filters, f_size=4, normalize=True):
-    d = tf.keras.layers.Conv2D(filters, kernel_size=f_size, padding='same')(layer_input)
+    d = tf.keras.layers.Conv2D(filters, kernel_size=f_size, strides=2, padding='same')(layer_input)
     d = tf.keras.layers.LeakyReLU(0.2)(d)
     if normalize:
         d = tfa.layers.InstanceNormalization()(d)
