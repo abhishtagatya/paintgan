@@ -79,3 +79,9 @@ class PGAN:
     def restore_checkpoint(self):
         if self.checkpoint_manager.latest_checkpoint:
             self.model_checkpoint.restore(self.checkpoint_manager.latest_checkpoint)
+
+    def inference(self, content):
+        pred = self.generator_AB.predict(content)
+        pred = (pred[0] * 127.5 + 127.5).astype(np.uint8)
+
+        return pred

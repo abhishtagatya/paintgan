@@ -92,6 +92,26 @@ class PaintGAN(Algorithm):
 
         return model
 
+    def evaluate(self, content, save_filename='img.jpg', size=(256, 256, 3)):
+        content_image = preprocess_test_image(content)
+
+        content_image = tf.reshape(
+            tf.convert_to_tensor(
+                content_image
+            ),
+            (1, *size)
+        )
+        recon_image = self.model.inference(content_image)
+
+        if self.mode == 'inference':
+            keras.preprocessing.image.save_img(f'{self.model_name}/inferences/{save_filename}', recon_image)
+
+        if self.mode == 'evaluate':
+            save_name = content.rsplit(".", 1)[0].split('/')[-1] + '_stylized_' + save_filename
+            keras.preprocessing.image.save_img(f'{self.model_name}/evaluates/{save_name}', recon_image)
+
+        keras.preprocessing.image.save_img(f'{save_filename}', recon_image)
+
     def train(self, checkpoint_per=10):
 
         for epoch in range(self.epochs):

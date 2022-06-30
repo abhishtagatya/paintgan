@@ -6,6 +6,7 @@ from tqdm import tqdm
 from algorithm.gatys import Gatys
 from algorithm.ada_in import AdaIN
 from algorithm.cyclegan import CycleGAN
+from algorithm.pgan import PaintGAN
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Evaluate Model")
@@ -67,6 +68,25 @@ if __name__ == '__main__':
             model.evaluate(
                 save_filename=args.save_file
             )
+
+    if args.model == 'pgan':
+        model = PaintGAN(
+            checkpoint=args.checkpoint,
+            mode='evaluate'
+        )
+
+        if not os.path.exists(args.content_dir):
+            raise FileNotFoundError(f"Content Directory is not Found : {args.content_dir}")
+
+        eval_paths = os.listdir(args.content_dir)
+
+        for eval_img in tqdm(eval_paths):
+            model.evaluate(
+                os.path.join(args.content_dir, eval_img),
+                save_filename=args.save_file
+            )
+
+
 
 
 
