@@ -111,25 +111,28 @@ class PaintGAN(Algorithm):
                 valid = np.ones((resize_batch,) + self.patch_disc)
                 fake = np.zeros((resize_batch,) + self.patch_disc)
 
-                # Translates images to opposite domain
-                fake_B = self.model.generator_AB.predict(images_A[:resize_batch])
-                fake_A = self.model.generator_BA.predict(images_B[:resize_batch])
+                images_A_r = images_A[:resize_batch]
+                images_B_r = images_B[:resize_batch]
 
-                DA_loss_real = self.model.discriminator_A.train_on_batch(images_A, valid)
+                # Translates images to opposite domain
+                fake_B = self.model.generator_AB.predict(images_A_r)
+                fake_A = self.model.generator_BA.predict(images_B_r)
+
+                DA_loss_real = self.model.discriminator_A.train_on_batch(images_A_r, valid)
                 DA_loss_fake = self.model.discriminator_A.train_on_batch(fake_A, fake)
                 DA_loss = 0.5 * np.add(DA_loss_real, DA_loss_fake)
 
-                DB_loss_real = self.model.discriminator_B.train_on_batch(images_B, valid)
+                DB_loss_real = self.model.discriminator_B.train_on_batch(images_B_r, valid)
                 DB_loss_fake = self.model.discriminator_B.train_on_batch(fake_B, fake)
                 DB_loss = 0.5 * np.add(DB_loss_real, DB_loss_fake)
 
                 D_loss = 0.5 * np.add(DA_loss, DB_loss)
 
                 G_loss = self.model.combined.train_on_batch(
-                    [images_A, images_B],
+                    [images_A_r, images_B_r],
                     [valid, valid,
-                     images_B, images_A,
-                     images_A, images_B]
+                     images_B_r, images_A_r,
+                     images_A_r, images_B_r]
                 )
 
                 self.D_Loss_metric.update_state(D_loss)
