@@ -70,6 +70,7 @@ if __name__ == '__main__':
         model = PaintGAN(
             content_dir=args.content,
             style_dir=args.style,
+            domain=args.style_domain,
             epochs=args.epochs,
             batch_size=args.batch_size,
         )
