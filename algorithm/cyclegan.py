@@ -174,14 +174,3 @@ class CycleGAN(Algorithm):
 
         keras.preprocessing.image.save_img(f'{save_filename}', recon_image)
 
-
-
-
-
-
-
-
-
-
-
-

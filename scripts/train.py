@@ -5,6 +5,7 @@ import tensorflow as tf
 from algorithm.gatys import Gatys
 from algorithm.ada_in import AdaIN
 from algorithm.cyclegan import CycleGAN
+from algorithm.pgan import PaintGAN
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Train Model")
@@ -61,6 +62,16 @@ if __name__ == '__main__':
             content_dir=args.content,
             style_dir=args.style,
             epochs=args.epochs,
+        )
+
+        model.train()
+
+    if args.model == 'pgan':
+        model = PaintGAN(
+            content_dir=args.content,
+            style_dir=args.style,
+            epochs=args.epochs,
+            batch_size=args.batch_size,
         )
 
         model.train()
