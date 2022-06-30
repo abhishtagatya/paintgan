@@ -87,9 +87,8 @@ class PaintGAN(Algorithm):
             checkpoint_path=self.checkpoint_path
         )
 
-        self.DA_loss_metric = keras.metrics.Mean(name="DA_loss")
-        self.DB_loss_metric = keras.metrics.Mean(name="DB_loss")
-        self.G_loss = keras.metrics.Mean(name="G_loss")
+        self.D_Loss_metric = keras.metrics.Mean(name="D_Loss")
+        self.G_loss_metric = keras.metrics.Mean(name="G_loss")
 
         return model
 
@@ -98,16 +97,14 @@ class PaintGAN(Algorithm):
         valid = np.ones((self.batch_size,) + self.patch_disc)
         fake = np.zeros((self.batch_size,) + self.patch_disc)
 
-        eval_content, eval_style = self.test_ds.take(1).get_single_element()
-
         for epoch in range(self.epochs):
 
             dm = DisplayMonitor(self.model, self.model_name, self.style_domain, self.test_ds)
             cm = CheckpointMonitor(self.model, self.model_name, self.style_domain, 5)
 
             print(f'\nEpoch {epoch + 1}/{self.epochs}')
-            pb_i = Progbar(self.train_ds.element_spec[0].shape[0], stateful_metrics=[
-                'DA_Loss', 'DB_Loss', 'G_Loss'
+            pb_i = Progbar(self.train_ds.cardinality().numpy(), stateful_metrics=[
+                'D_Loss', 'G_Loss'
             ])
 
             for batch_i, (images_A, images_B) in enumerate(self.train_ds):
@@ -131,21 +128,18 @@ class PaintGAN(Algorithm):
                     [valid, valid, images_B, images_A, images_A, images_B]
                 )
 
-                self.DA_loss_metric.update_state(DA_loss)
-                self.DB_loss_metric.update_state(DB_loss)
-                self.G_loss.update_state(G_loss)
+                self.D_Loss_metric.update_state(D_loss)
+                self.G_loss_metric.update_state(G_loss)
 
                 metric_values = [
-                    ('DA_Loss', self.DA_loss_metric.result()),
-                    ('DB_Loss', self.DB_loss_metric.result()),
-                    ('G_Loss', self.G_loss.result())
+                    ('D_Loss', self.D_Loss_metric.result()),
+                    ('G_Loss', self.G_loss_metric.result())
                 ]
 
                 pb_i.add(1, values=metric_values)
 
-            self.DA_loss_metric.reset_states()
-            self.DB_loss_metric.reset_states()
-            self.G_loss.reset_states()
+            self.D_Loss_metric.reset_states()
+            self.G_loss_metric.reset_states()
 
             dm.on_epoch_end(epoch)
             cm.on_epoch_end(epoch)
