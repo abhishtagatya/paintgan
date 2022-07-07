@@ -5,6 +5,8 @@ import tarfile
 import argparse
 from zipfile import ZipFile
 
+import kaggle
+
 
 def stage_path(data_dir: str, name: str):
     """
@@ -112,13 +114,24 @@ def download_from_drive(data_dir: str, dataset_type: str, dataset_url=None):
     )
 
 
+def download_from_kaggle(data_dir: str, dataset: str):
+    kaggle.api.authenticate()
+    kaggle.api.dataset_download_files(dataset, data_dir, unzip=True)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Download Dataset")
-    parser.add_argument('--data-dir', type=str, required=True)
-    parser.add_argument('--dataset', type=str, required=True)
+    parser.add_argument('--source', type=str, required=True)
+    parser.add_argument('--data-dir', type=str, required=False)
+    parser.add_argument('--dataset', type=str, required=False)
     args = parser.parse_args()
 
-    download_from_drive(args.data_dir, args.dataset)
+    if args.source == 'DRIVE':
+        download_from_drive(args.data_dir, args.dataset)
+
+    if args.source == 'KAGGLE':
+        download_from_kaggle(args.data_dir, args.dataset)
+
 
 
 
