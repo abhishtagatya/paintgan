@@ -18,7 +18,7 @@ if __name__ == '__main__':
     parser.add_argument('--steps-per-epoch', type=int, required=False)
     parser.add_argument('--batch-size', type=int, required=False)
     parser.add_argument('--buffer-size', type=int, required=False)
-    parser.add_argument('--learning-rate', type=int, required=False)
+    parser.add_argument('--learning-rate', type=float, required=False)
 
     parser.add_argument('--content-domain', type=str, required=False)
     parser.add_argument('--style-domain', type=str, required=False)
