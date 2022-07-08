@@ -1,5 +1,6 @@
 import os
 import glob
+import random
 from struct import unpack
 
 import tensorflow as tf
@@ -195,11 +196,13 @@ class DomainDataLoader(BaseDataLoader):
                    batch_size=1,
                    buffer_size=1,
                    val_split=0.2,
+                   max_set=0,
                    auto_tune=tf.data.AUTOTUNE
                    ):
         """
             Load class as a Designated Dataset
 
+            :param max_set: Maximum number of set chosen randomly
             :param preprocess_func_train: Image Preprocessing Function
             :param preprocess_func_test: Image Preprocessing Function
             :param batch_size: Batch Size of Dataset
@@ -208,6 +211,10 @@ class DomainDataLoader(BaseDataLoader):
             :param auto_tune: Auto Tune Dataset
             :return: (Train, Validation) -> Tensorflow Dataset
         """
+
+        if max_set > 0:
+            self.content_list = random.choices(self.content_list, k=max_set)
+            self.style_list = random.choices(self.style_list, k=max_set)
 
         # Splitting Content by Ratio
         content_train = self.content_list[:int(self.total_content * (1.0 - val_split))]

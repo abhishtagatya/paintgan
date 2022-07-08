@@ -22,7 +22,7 @@ from algorithm.pgan_comp.model import PGAN
 from util.data_loader import DomainDataLoader
 
 
-class PaintGAN(Algorithm):
+class PaintGAN_Ablation(Algorithm):
 
     def __init__(self,
                  content_dir='',
@@ -30,17 +30,17 @@ class PaintGAN(Algorithm):
                  domain='',
                  epochs=1,
                  batch_size=8,
+                 learning_rate=2e-4,
+                 beta_1=0.5,
                  image_size=(256, 256, 3),
-                 max_set=0,
                  patch=None,
                  checkpoint=None,
                  mode='train'
                  ):
-        super(PaintGAN, self).__init__(content_dir, style_dir, epochs, batch_size, image_size, mode)
+        super(PaintGAN_Ablation, self).__init__(content_dir, style_dir, epochs, batch_size, image_size, mode)
         self._create_result_folder()
 
         self.style_domain = domain
-        self.max_set = max_set
 
         patch = int(self.image_size[0] / 2 ** 4)
         self.patch_disc = (patch, patch, 1)
@@ -51,7 +51,7 @@ class PaintGAN(Algorithm):
         self.gen_AB = get_unet_generator()
         self.gen_BA = get_unet_generator()
 
-        self.optimizer = keras.optimizers.Adam(learning_rate=2e-4, beta_1=0.5)
+        self.optimizer = keras.optimizers.Adam(learning_rate=learning_rate, beta_1=beta_1)
 
         self.checkpoint_path = f'{self.model_name}/checkpoints/{self.style_domain}_{self.epochs}'
         if checkpoint:
@@ -66,8 +66,7 @@ class PaintGAN(Algorithm):
             self.train_ds, self.test_ds = self.data_loader.as_dataset(
                 batch_size=self.batch_size,
                 preprocess_func_train=preprocess_train_image,
-                preprocess_func_test=preprocess_test_image,
-                max_set=self.max_set
+                preprocess_func_test=preprocess_test_image
             )
 
         self.model = self.build_model()

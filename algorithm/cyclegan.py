@@ -34,6 +34,7 @@ class CycleGAN(Algorithm):
                  batch_size=1,
                  buffer_size=256,
                  image_size=(256, 256, 3),
+                 max_set=0,
                  checkpoint=None,
                  mode='train'
                  ):
@@ -41,6 +42,7 @@ class CycleGAN(Algorithm):
         self._create_result_folder()
 
         self.style_domain = domain
+        self.max_set = max_set
 
         self.buffer_size = buffer_size
 
@@ -97,7 +99,8 @@ class CycleGAN(Algorithm):
                 batch_size=self.batch_size,
                 buffer_size=self.buffer_size,
                 preprocess_func_train=preprocess_train_image,
-                preprocess_func_test=preprocess_test_image
+                preprocess_func_test=preprocess_test_image,
+                max_set=self.max_set
             )
 
         self.model = self.build_model()
