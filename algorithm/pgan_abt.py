@@ -33,6 +33,7 @@ class PaintGAN_Ablation(Algorithm):
                  learning_rate=2e-4,
                  beta_1=0.5,
                  image_size=(256, 256, 3),
+                 max_set=0,
                  patch=None,
                  checkpoint=None,
                  mode='train'
@@ -41,6 +42,7 @@ class PaintGAN_Ablation(Algorithm):
         self._create_result_folder()
 
         self.style_domain = domain
+        self.max_set = max_set
 
         patch = int(self.image_size[0] / 2 ** 4)
         self.patch_disc = (patch, patch, 1)
@@ -61,7 +63,8 @@ class PaintGAN_Ablation(Algorithm):
             self.data_loader = DomainDataLoader(
                 content_path=self.content_dir,
                 style_path=self.style_dir,
-                style_domain=self.style_domain
+                style_domain=self.style_domain,
+                max_set=self.max_set
             )
             self.train_ds, self.test_ds = self.data_loader.as_dataset(
                 batch_size=self.batch_size,

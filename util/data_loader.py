@@ -158,7 +158,7 @@ class ArbitraryDataLoader(BaseDataLoader):
 
 class DomainDataLoader(BaseDataLoader):
 
-    def __init__(self, content_path, style_path, content_domain='', style_domain='', recursive=True):
+    def __init__(self, content_path, style_path, content_domain='', style_domain='', max_set=0, recursive=True):
         super(DomainDataLoader, self).__init__(
             content_path,
             style_path,
@@ -170,11 +170,17 @@ class DomainDataLoader(BaseDataLoader):
         self.content_domain = content_domain
         self.style_domain = style_domain
 
+        self.max_set = max_set
+
         if self.content_domain != '':
             self.content_list = self.domain_selection(self.content_list, self.content_domain)
 
         if self.style_domain != '':
             self.style_list = self.domain_selection(self.style_list, self.style_domain)
+
+        if self.max_set > 0:
+            self.content_list = random.choices(self.content_list, k=self.max_set)
+            self.style_list = random.choices(self.style_list, k=self.max_set)
 
         self.content_list = self.remove_corrupt(self.content_list)
         self.style_list = self.remove_corrupt(self.style_list)
@@ -196,7 +202,6 @@ class DomainDataLoader(BaseDataLoader):
                    batch_size=1,
                    buffer_size=1,
                    val_split=0.2,
-                   max_set=0,
                    auto_tune=tf.data.AUTOTUNE
                    ):
         """
@@ -211,10 +216,6 @@ class DomainDataLoader(BaseDataLoader):
             :param auto_tune: Auto Tune Dataset
             :return: (Train, Validation) -> Tensorflow Dataset
         """
-
-        if max_set > 0:
-            self.content_list = random.choices(self.content_list, k=max_set)
-            self.style_list = random.choices(self.style_list, k=max_set)
 
         # Splitting Content by Ratio
         content_train = self.content_list[:int(self.total_content * (1.0 - val_split))]

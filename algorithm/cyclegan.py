@@ -93,14 +93,14 @@ class CycleGAN(Algorithm):
             self.data_loader = DomainDataLoader(
                 content_path=self.content_dir,
                 style_path=self.style_dir,
-                style_domain=self.style_domain
+                style_domain=self.style_domain,
+                max_set=self.max_set
             )
             self.train_ds, self.test_ds = self.data_loader.as_dataset(
                 batch_size=self.batch_size,
                 buffer_size=self.buffer_size,
                 preprocess_func_train=preprocess_train_image,
                 preprocess_func_test=preprocess_test_image,
-                max_set=self.max_set
             )
 
         self.model = self.build_model()
