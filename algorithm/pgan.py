@@ -173,8 +173,8 @@ class PaintGAN(Algorithm):
 
             self.train_log.append([
                 epoch,
-                self.D_Loss_metric.result(),
-                self.G_loss_metric.result()
+                self.D_Loss_metric.result().numpy(),
+                self.G_loss_metric.result().numpy()
             ])
 
             self.D_Loss_metric.reset_states()

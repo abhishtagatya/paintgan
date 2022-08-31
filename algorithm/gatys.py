@@ -141,9 +141,9 @@ class Gatys(Algorithm):
             if self.mode == "train":
                 self.train_log.append([
                     epoch,
-                    self.train_content_loss_metric.result(),
-                    self.train_style_loss_metric.result(),
-                    self.train_total_loss_metric.result()
+                    self.train_content_loss_metric.result().numpy(),
+                    self.train_style_loss_metric.result().numpy(),
+                    self.train_total_loss_metric.result().numpy()
                 ])
 
             self.train_style_loss_metric.reset_states()
