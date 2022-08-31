@@ -121,7 +121,7 @@ class CycleGAN(Algorithm):
                     self.model
                 ),
                 CSVLogger(
-                    f'{self.model_name}_{self.style_domain}-{self.epochs}.csv',
+                    f'{self.model_name}/logs/{self.model_name}_{self.style_domain}-{self.epochs}.csv',
                     append=True,
                     separator=';'
                 )

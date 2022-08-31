@@ -10,16 +10,18 @@
     Reference : https://www.tensorflow.org/tutorials/generative/style_transfer
 """
 
+import csv
+
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.utils import Progbar
-from keras.callbacks import CSVLogger
 import matplotlib.pyplot as plt
 
 from algorithm.base import Algorithm
 
 from algorithm.gatys_comp.preprocessing import preprocess_image
 from algorithm.gatys_comp.func import style_loss_fn, content_loss_fn, clip_0_1
+from algorithm.gatys_comp.monitor import CSVLogger
 from algorithm.gatys_comp.model import GatysFeatureExtractor
 
 
@@ -59,6 +61,9 @@ class Gatys(Algorithm):
 
         self.content_image = preprocess_image(self.content_dir)
         self.style_image = preprocess_image(self.style_dir)
+
+        self.csv_log = CSVLogger(self.model_name, self.style_dir, self.epochs, self.epochs)
+        self.train_log = []
 
         self.build_model()
 
@@ -111,6 +116,7 @@ class Gatys(Algorithm):
         }
 
     def train(self):
+
         image = tf.Variable(self.content_image)
 
         for epoch in range(self.epochs):
@@ -132,12 +138,21 @@ class Gatys(Algorithm):
                     ]
                     pb_i.add(1, values=metric_values)
 
+            if self.mode == "train":
+                self.train_log.append([
+                    epoch,
+                    self.train_content_loss_metric.result(),
+                    self.train_style_loss_metric.result(),
+                    self.train_total_loss_metric.result()
+                ])
+
             self.train_style_loss_metric.reset_states()
             self.train_content_loss_metric.reset_states()
             self.train_total_loss_metric.reset_states()
 
             # Train Monitors
             if self.mode == 'train':
+
                 fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(20, 5))
                 ax[0].imshow(tf.squeeze(self.style_image, axis=0))
                 ax[0].set_title(f"Style: {epoch + 1:03d}")
@@ -150,6 +165,9 @@ class Gatys(Algorithm):
 
                 plt.savefig(f'{self.model_name}/results/{self.model_name}_{epoch + 1}.png', format='png')
                 plt.show()
+
+        if self.mode == 'train':
+            self.csv_log.compile(self.train_log)
 
         return image
 

@@ -1,6 +1,29 @@
+import csv
 import numpy as np
 
 import matplotlib.pyplot as plt
+
+
+class CSVLogger:
+
+    def __init__(self, model_name, style_domain, epochs, checkpoint_per=1):
+        self.model_name = model_name
+        self.checkpoint_per = checkpoint_per
+        self.style = style_domain
+        self.epochs = epochs
+
+        self.filename = f'{self.model_name}/logs/{self.model_name}_{self.style}-{self.epochs}.csv'
+
+    def compile(self, data):
+
+        header = [
+            'epoch', 'D_Loss', 'G_Loss'
+        ]
+
+        with open(self.filename, 'w') as log_file:
+            writer = csv.writer(log_file, delimiter=';')
+            writer.writerow(header)
+            writer.writerows(data)
 
 
 class CheckpointMonitor:

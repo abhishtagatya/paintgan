@@ -17,7 +17,7 @@ from algorithm.base import Algorithm
 
 from algorithm.pgan_comp.preprocessing import preprocess_train_image, preprocess_test_image
 from algorithm.pgan_comp.func import get_unet_generator, get_discriminator
-from algorithm.pgan_comp.monitor import DisplayMonitor, CheckpointMonitor
+from algorithm.pgan_comp.monitor import DisplayMonitor, CheckpointMonitor, CSVLogger
 from algorithm.pgan_comp.model import PGAN
 from util.data_loader import DomainDataLoader
 
@@ -71,6 +71,9 @@ class PaintGAN(Algorithm):
             )
 
         self.model = self.build_model()
+
+        self.csv_log = CSVLogger(self.model_name, self.style_domain, self.epochs, self.epochs)
+        self.train_log = []
 
         if checkpoint:
             self.model.restore_checkpoint()
@@ -168,8 +171,16 @@ class PaintGAN(Algorithm):
 
                 pb_i.add(1, values=metric_values)
 
+            self.train_log.append([
+                epoch,
+                self.D_Loss_metric.result(),
+                self.G_loss_metric.result()
+            ])
+
             self.D_Loss_metric.reset_states()
             self.G_loss_metric.reset_states()
 
             dm.on_epoch_end(epoch)
             cm.on_epoch_end(epoch)
+
+        self.csv_log.compile(self.train_log)

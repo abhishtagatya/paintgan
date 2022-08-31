@@ -77,7 +77,7 @@ class AdaIN(Algorithm):
                     save_freq='epoch'
                 ),
                 CSVLogger(
-                    f'{self.model_name}-{self.epochs}-{self.batch_size}.csv',
+                    f'{self.model_name}/logs/{self.model_name}_{self.epochs}-{self.batch_size}.csv',
                     append=True,
                     separator=';'
                 )

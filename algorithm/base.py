@@ -44,7 +44,8 @@ class Algorithm:
             'results',
             'checkpoints',
             'evaluates',
-            'inferences'
+            'inferences',
+            'logs'
         ]
         for names in sub_folder_names:
             os.makedirs(os.path.join(cls.__name__, names), exist_ok=True)
