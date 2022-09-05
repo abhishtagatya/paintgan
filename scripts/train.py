@@ -9,20 +9,22 @@ from algorithm.pgan import PaintGAN
 from algorithm.pgan_abt import PaintGAN_Ablation
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Train Model")
-    parser.add_argument('--model', type=str, required=True)
-    parser.add_argument('--content', type=str, required=True)
-    parser.add_argument('--style', type=str, required=True)
+    parser = argparse.ArgumentParser(description="""
+        Train Models from Scratch
+    """)
+    parser.add_argument('--model', help='model name', type=str, required=True)
+    parser.add_argument('--content', help='content directory / file', type=str, required=True)
+    parser.add_argument('--style', help='style directory / file', type=str, required=True)
 
-    parser.add_argument('--epochs', type=int, required=False)
-    parser.add_argument('--steps-per-epoch', type=int, required=False)
-    parser.add_argument('--batch-size', type=int, required=False)
-    parser.add_argument('--buffer-size', type=int, required=False)
-    parser.add_argument('--learning-rate', type=float, required=False)
+    parser.add_argument('--epochs', help='epochs to train', type=int, required=False)
+    parser.add_argument('--steps-per-epoch', help='steps per epoch', type=int, required=False)
+    parser.add_argument('--batch-size', help='batch size', type=int, required=False)
+    parser.add_argument('--buffer-size', help='buffer size', type=int, required=False)
+    parser.add_argument('--learning-rate', help='learning rate', type=float, required=False)
 
-    parser.add_argument('--content-domain', type=str, required=False)
-    parser.add_argument('--style-domain', type=str, required=False)
-    parser.add_argument('--max-set', type=int, required=False)
+    parser.add_argument('--content-domain', help='content domain (for PDPM)', type=str, required=False)
+    parser.add_argument('--style-domain', help='style domain (for PDPM)', type=str, required=False)
+    parser.add_argument('--max-set', help='max set for dataset', type=int, required=False)
 
     args = parser.parse_args()
 

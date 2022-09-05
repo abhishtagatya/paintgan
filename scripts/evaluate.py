@@ -11,11 +11,11 @@ from algorithm.pgan_abt import PaintGAN_Ablation
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Evaluate Model")
-    parser.add_argument('--model', type=str, required=True)
-    parser.add_argument('--content-dir', type=str, required=True)
-    parser.add_argument('--style', type=str, required=False)
-    parser.add_argument('--checkpoint', type=str, required=False)
-    parser.add_argument('--save-file', type=str, required=False)
+    parser.add_argument('--model', help='model name', type=str, required=True)
+    parser.add_argument('--content-dir', help='content directory', type=str, required=True)
+    parser.add_argument('--style', help='style directory / file', type=str, required=False)
+    parser.add_argument('--checkpoint', help='checkpoint directory / file', type=str, required=False)
+    parser.add_argument('--save-file', help='save file name', type=str, required=False)
 
     args = parser.parse_args()
 

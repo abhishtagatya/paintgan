@@ -121,9 +121,9 @@ def download_from_kaggle(data_dir: str, dataset: str):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Download Dataset")
-    parser.add_argument('--source', type=str, required=True)
-    parser.add_argument('--data-dir', type=str, required=False)
-    parser.add_argument('--dataset', type=str, required=False)
+    parser.add_argument('--source', help='source of download', type=str, required=True)
+    parser.add_argument('--data-dir', help='download to directory', type=str, required=False)
+    parser.add_argument('--dataset', help='dataset name', type=str, required=False)
     args = parser.parse_args()
 
     if args.source == 'DRIVE':

@@ -8,11 +8,11 @@ from evaluate.deception_score import DeceptionScore
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Score Model")
-    parser.add_argument('--metric', type=str, required=True)
-    parser.add_argument('--model', type=str, required=True)
-    parser.add_argument('--eval-dir', type=str, required=False)
-    parser.add_argument('--eval-dataset', type=str, required=False)
-    parser.add_argument('--checkpoint', type=str, required=False)
+    parser.add_argument('--metric', help='metric name', type=str, required=True)
+    parser.add_argument('--model', help='model name', type=str, required=True)
+    parser.add_argument('--eval-dir', help='evaluation directory / file', type=str, required=False)
+    parser.add_argument('--eval-dataset', help='evaluation dataset (reference dataset)', type=str, required=False)
+    parser.add_argument('--checkpoint', help='checkpoint directory / file', type=str, required=False)
 
     args = parser.parse_args()
 
