@@ -15,14 +15,14 @@ import matplotlib.pyplot as plt
 
 from algorithm.base import Algorithm
 
-from algorithm.pgan_comp.preprocessing import preprocess_train_image, preprocess_test_image
-from algorithm.pgan_comp.func import get_unet_generator, get_discriminator
-from algorithm.pgan_comp.monitor import DisplayMonitor, CheckpointMonitor, CSVLogger
-from algorithm.pgan_comp.model import PGAN
+from algorithm.discogan_comp.preprocessing import preprocess_train_image, preprocess_test_image
+from algorithm.discogan_comp.func import get_unet_generator, get_discriminator
+from algorithm.discogan_comp.monitor import DisplayMonitor, CheckpointMonitor, CSVLogger
+from algorithm.discogan_comp.model import DiscoGenAdvNet
 from util.data_loader import DomainDataLoader
 
 
-class PaintGAN(Algorithm):
+class DiscoGAN(Algorithm):
 
     def __init__(self,
                  content_dir='',
@@ -36,7 +36,7 @@ class PaintGAN(Algorithm):
                  checkpoint=None,
                  mode='train'
                  ):
-        super(PaintGAN, self).__init__(content_dir, style_dir, epochs, batch_size, image_size, mode)
+        super(DiscoGAN, self).__init__(content_dir, style_dir, epochs, batch_size, image_size, mode)
         self._create_result_folder()
 
         self.style_domain = domain
@@ -80,7 +80,7 @@ class PaintGAN(Algorithm):
 
     def build_model(self):
 
-        model = PGAN(
+        model = DiscoGenAdvNet(
             generator_AB=self.gen_AB,
             generator_BA=self.gen_BA,
             discriminator_A=self.disc_A,

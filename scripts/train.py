@@ -5,7 +5,7 @@ import tensorflow as tf
 from algorithm.gatys import Gatys
 from algorithm.ada_in import AdaIN
 from algorithm.cyclegan import CycleGAN
-from algorithm.pgan import PaintGAN
+from algorithm.discogan import DiscoGAN
 from algorithm.pgan_abt import PaintGAN_Ablation
 
 if __name__ == '__main__':
@@ -73,12 +73,12 @@ if __name__ == '__main__':
 
         model.train()
 
-    if args.model == 'pgan':
+    if args.model == 'discogan':
         content_domain = args.content_domain if args.content_domain is not None else ''
         style_domain = args.style_domain if args.style_domain is not None else ''
         max_set = args.max_set if args.max_set is not None else 0
 
-        model = PaintGAN(
+        model = DiscoGAN(
             content_dir=args.content,
             style_dir=args.style,
             domain=args.style_domain,

@@ -6,7 +6,7 @@ from tqdm import tqdm
 from algorithm.gatys import Gatys
 from algorithm.ada_in import AdaIN
 from algorithm.cyclegan import CycleGAN
-from algorithm.pgan import PaintGAN
+from algorithm.discogan import DiscoGAN
 from algorithm.pgan_abt import PaintGAN_Ablation
 
 if __name__ == '__main__':
@@ -70,8 +70,8 @@ if __name__ == '__main__':
                 save_filename=args.save_file
             )
 
-    if args.model == 'pgan':
-        model = PaintGAN(
+    if args.model == 'discogan':
+        model = DiscoGAN(
             checkpoint=args.checkpoint,
             mode='evaluate'
         )

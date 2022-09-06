@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow import keras
 
 
-class PGAN:
+class DiscoGenAdvNet:
 
     def __init__(self,
                  generator_AB,
